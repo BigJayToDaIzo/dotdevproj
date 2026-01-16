@@ -1,103 +1,208 @@
-export interface Link {
-	label: string;
-	url: string;
-}
+// Resume data for josephmyers.dev
 
-export interface Header {
-	name: string;
-	title: string;
-	email: string;
-	location?: string;
-	links: Link[];
+export interface ContactInfo {
+  name: string;
+  title: string;
+  email: string;
+  linkedin: string;
+  github?: string;
+  website?: string;
 }
 
 export interface Experience {
-	company: string;
-	role: string;
-	startDate: string;
-	endDate: string;
-	achievements: string[];
-	technologies?: string[];
-}
-
-export interface SkillCategory {
-	category: string;
-	skills: string[];
+  company: string;
+  role: string;
+  startDate: string;
+  endDate: string;
+  bullets: string[];
 }
 
 export interface Education {
-	institution: string;
-	degree: string;
-	field: string;
-	year: string;
-	details?: string;
+  institution: string;
+  degree: string;
+  field: string;
+  minor?: string;
+  startYear: number;
+  endYear: number;
+}
+
+export interface SkillCategory {
+  level: string;
+  skills: string[];
 }
 
 export interface ResumeData {
-	header: Header;
-	experience: Experience[];
-	skills: SkillCategory[];
-	education: Education[];
+  contact: ContactInfo;
+  experience: Experience[];
+  education: Education[];
+  skills: SkillCategory[];
+  tools: string[];
+  misc: string[];
 }
 
-export const resumeData: ResumeData = {
-	header: {
-		name: "Joseph Myers",
-		title: "Software Engineer",
-		email: "joseph@josephmyers.dev",
-		location: "Remote",
-		links: [
-			{ label: "GitHub", url: "https://github.com/BigJayToDaIzo" },
-			{ label: "LinkedIn", url: "https://linkedin.com/in/yourprofile" },
-		],
-	},
-	experience: [
-		{
-			company: "Company Name",
-			role: "Senior Software Engineer",
-			startDate: "Jan 2023",
-			endDate: "Present",
-			achievements: [
-				"Led development of key features resulting in 40% increase in user engagement",
-				"Architected and implemented microservices infrastructure reducing deployment time by 60%",
-				"Mentored team of 5 junior developers, establishing code review practices and testing standards",
-			],
-			technologies: ["React", "Node.js", "PostgreSQL", "Docker", "AWS"],
-		},
-		{
-			company: "Previous Company",
-			role: "Software Engineer",
-			startDate: "Jun 2020",
-			endDate: "Dec 2022",
-			achievements: [
-				"Built responsive web applications serving 100k+ monthly active users",
-				"Improved application performance by 50% through optimization and caching strategies",
-				"Collaborated with design team to implement accessible UI components",
-			],
-			technologies: ["JavaScript", "Vue.js", "Express", "MongoDB"],
-		},
-	],
-	skills: [
-		{
-			category: "Languages",
-			skills: ["JavaScript", "TypeScript", "Python", "HTML", "CSS"],
-		},
-		{
-			category: "Frameworks & Libraries",
-			skills: ["React", "Astro", "Node.js", "Express", "Vue.js"],
-		},
-		{
-			category: "Tools & Platforms",
-			skills: ["Git", "Docker", "AWS", "PostgreSQL", "MongoDB"],
-		},
-	],
-	education: [
-		{
-			institution: "University Name",
-			degree: "Bachelor of Science",
-			field: "Computer Science",
-			year: "2020",
-			details: "Graduated with honors",
-		},
-	],
+export const resume: ResumeData = {
+  contact: {
+    name: "Joseph Myers",
+    title: "Software Developer",
+    email: "webinquiries@josephmyers.dev",
+    linkedin: "https://www.linkedin.com/in/josephlmyers",
+    website: "https://josephmyers.dev",
+  },
+
+  experience: [
+    {
+      company: "Aria Cosmetic Surgery",
+      role: "CTO",
+      startDate: "Mar 2025",
+      endDate: "Present",
+      bullets: [],
+    },
+    {
+      company: "Independent Consultant",
+      role: "Software Developer",
+      startDate: "Sept 2022",
+      endDate: "Mar 2025",
+      bullets: [
+        "Wrote automation scripts for businesses to streamline menial tasks",
+        "Provided 3D printing design and prototyping services",
+      ],
+    },
+    {
+      company: "Boeing",
+      role: "Programmer Analyst",
+      startDate: "2017",
+      endDate: "Sept 2022",
+      bullets: [
+        "Wrote Blue/Green Deploy CI/CD Pipeline for Pivotal Cloud Foundry in Python",
+        "Built SPAs with .NET, ASP, Java, Angular and React",
+        "Parsed Historical User Data from Various API Endpoints Using Python",
+        "Modernized Flash/ColdFusion apps by migrating them into Pivotal Cloud Foundry using .NET/Entity Framework/Angular 11",
+        "Collaborated with teams on automation of low level tasks",
+        "Built HR Collective Bargaining and Discipline tracking application in .NET/Angular and deployed in a CI/CD pipeline in ADO",
+      ],
+    },
+    {
+      company: "Astronomical Society of the Pacific",
+      role: "Intern",
+      startDate: "Oct 2017",
+      endDate: "Dec 2018",
+      bullets: [
+        "Wrote Astrometry plugins for ImageJ Graphical Suite in Java",
+        "Collaborated with PhD Astrophysicists including Dr. Pamela Gay for advanced mathematics and astronomy knowledge transfer",
+        "Refactored WebApp from PHP to Laravel",
+        "Worked Project Outreach via monthly booths at St. Louis Science Center",
+        "Attended conferences in Washington D.C. to present work to NASA Scientists and Engineers",
+      ],
+    },
+    {
+      company: "Various Restaurants and Bars",
+      role: "Bartender",
+      startDate: "Jan 2003",
+      endDate: "Oct 2017",
+      bullets: [],
+    },
+  ],
+
+  education: [
+    {
+      institution: "Southern Illinois University Edwardsville",
+      degree: "Bachelor of Science",
+      field: "Computer Science",
+      minor: "Mathematics",
+      startYear: 2011,
+      endYear: 2017,
+    },
+  ],
+
+  skills: [
+    {
+      level: "500+ Hours",
+      skills: ["C#", ".NET", "Angular", "React"],
+    },
+    {
+      level: "300 Hours",
+      skills: ["Java", "Python", "C/C++"],
+    },
+    {
+      level: "200 Hours",
+      skills: ["MVC", "SQL", "PHP", "JavaScript", "TypeScript"],
+    },
+    {
+      level: "100 Hours",
+      skills: ["SQL Server", "MySQL", "HTML5", "CSS/SASS"],
+    },
+  ],
+
+  tools: [
+    "Helix",
+    "Zellij",
+    "Git",
+    "Linux",
+  ],
+
+  misc: [
+    "Agile methodology",
+    "Strong documentation skills",
+    "Linux",
+    "ChromeOS",
+    "Google Suite",
+  ],
+};
+
+// Site navigation configuration
+export interface NavItem {
+  label: string;
+  command: string;
+  path: string;
+  prompt: string;
+}
+
+export const navigation: NavItem[] = [
+  { label: "home", command: "cd ~", path: "/", prompt: "home" },
+  { label: "about", command: "cat about.md", path: "/about", prompt: "about" },
+  { label: "blog", command: "ls blog/", path: "/blog", prompt: "blog" },
+  { label: "projects", command: "tree projects/", path: "/projects", prompt: "projects" },
+  { label: "hire", command: "cat hire.md", path: "/hire", prompt: "hire" },
+];
+
+// ASCII art for different pages
+export const asciiArt = {
+  home: `
+     _                       _
+    (_) ___  ___  ___ _ __ | |__    _ __ ___  _   _  ___ _ __ ___
+    | |/ _ \\/ __|/ _ \\ '_ \\| '_ \\  | '_ \` _ \\| | | |/ _ \\ '__/ __|
+    | | (_) \\__ \\  __/ |_) | | | |_| | | | | | |_| |  __/ |  \\__ \\
+   _/ |\\___/|___/\\___| .__/|_| |_(_)_| |_| |_|\\__, |\\___|_|  |___/
+  |__/               |_|                      |___/
+`.trim(),
+
+  about: `
+   __ _| |__   ___  _   _| |_   _ __ ___   ___
+  / _\` | '_ \\ / _ \\| | | | __| | '_ \` _ \\ / _ \\
+ | (_| | |_) | (_) | |_| | |_  | | | | | |  __/
+  \\__,_|_.__/ \\___/ \\__,_|\\__| |_| |_| |_|\\___|
+`.trim(),
+
+  blog: `
+  | |__  | | ___   __ _
+  | '_ \\ | |/ _ \\ / _\` |
+  | |_) || | (_) | (_| |
+  |_.__/ |_|\\___/ \\__, |
+                  |___/
+`.trim(),
+
+  projects: `
+  _ __  _ __ ___  (_) ___  ___| |_ ___
+ | '_ \\| '__/ _ \\ | |/ _ \\/ __| __/ __|
+ | |_) | | | (_) || |  __/ (__| |_\\__ \\
+ | .__/|_|  \\___// |\\___|\\___|\\__|___/
+ |_|           |__/
+`.trim(),
+
+  hire: `
+  | |__ (_)_ __ ___   _ __ ___   ___
+  | '_ \\| | '__/ _ \\ | '_ \` _ \\ / _ \\
+  | | | | | | |  __/ | | | | | |  __/
+  |_| |_|_|_|  \\___| |_| |_| |_|\\___|
+`.trim(),
 };

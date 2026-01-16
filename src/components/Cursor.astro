@@ -1,0 +1,10 @@
+---
+// Blinking terminal cursor component
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<span class:list={['cursor', className]} aria-hidden="true"></span>

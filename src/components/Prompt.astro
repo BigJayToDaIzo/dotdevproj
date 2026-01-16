@@ -1,0 +1,16 @@
+---
+// Terminal prompt component
+// Displays: joseph@section:~$
+
+interface Props {
+  section?: string;
+  showCursor?: boolean;
+}
+
+const { section = 'home', showCursor = false } = Astro.props;
+---
+
+<span class="prompt">
+  <span class="prompt-user">joseph</span><span class="prompt-at">@</span><span class="prompt-host">{section}</span><span class="prompt-path">:~</span><span class="prompt-symbol">$</span>
+  {showCursor && <span class="cursor" aria-hidden="true"></span>}
+</span>

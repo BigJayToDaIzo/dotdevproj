@@ -1,0 +1,371 @@
+/* ============================================
+   TERMINAL THEME - josephmyers.dev
+   Modern dark theme with syntax highlighting colors
+   ============================================ */
+
+:root {
+  /* Base colors - Dracula-inspired */
+  --bg-primary: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-tertiary: #21262d;
+  --bg-highlight: #30363d;
+
+  /* Text colors */
+  --text-primary: #e6edf3;
+  --text-secondary: #8b949e;
+  --text-muted: #6e7681;
+
+  /* Syntax colors */
+  --syntax-green: #7ee787;
+  --syntax-blue: #79c0ff;
+  --syntax-purple: #d2a8ff;
+  --syntax-orange: #ffa657;
+  --syntax-red: #ff7b72;
+  --syntax-yellow: #ffd866;
+  --syntax-cyan: #a5d6ff;
+  --syntax-pink: #ff79c6;
+
+  /* UI colors */
+  --border-color: #30363d;
+  --accent: var(--syntax-green);
+  --accent-hover: #9cefac;
+  --link: var(--syntax-blue);
+  --link-hover: var(--syntax-cyan);
+
+  /* Terminal specific */
+  --prompt-user: var(--syntax-green);
+  --prompt-at: var(--text-secondary);
+  --prompt-host: var(--syntax-purple);
+  --prompt-path: var(--syntax-blue);
+  --prompt-symbol: var(--text-primary);
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  /* Typography */
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+
+  /* Effects */
+  --glow-green: 0 0 10px rgba(126, 231, 135, 0.3);
+  --glow-blue: 0 0 10px rgba(121, 192, 255, 0.3);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+}
+
+/* Light theme */
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f6f8fa;
+  --bg-tertiary: #eaeef2;
+  --bg-highlight: #d0d7de;
+
+  --text-primary: #1f2328;
+  --text-secondary: #656d76;
+  --text-muted: #8c959f;
+
+  --syntax-green: #1a7f37;
+  --syntax-blue: #0969da;
+  --syntax-purple: #8250df;
+  --syntax-orange: #bc4c00;
+  --syntax-red: #cf222e;
+  --syntax-yellow: #9a6700;
+  --syntax-cyan: #0550ae;
+  --syntax-pink: #bf3989;
+
+  --border-color: #d0d7de;
+  --accent: var(--syntax-green);
+  --accent-hover: #2da44e;
+  --link: var(--syntax-blue);
+  --link-hover: var(--syntax-purple);
+
+  --prompt-user: var(--syntax-green);
+  --prompt-at: var(--text-secondary);
+  --prompt-host: var(--syntax-purple);
+  --prompt-path: var(--syntax-blue);
+  --prompt-symbol: var(--text-primary);
+
+  --glow-green: 0 0 10px rgba(26, 127, 55, 0.2);
+  --glow-blue: 0 0 10px rgba(9, 105, 218, 0.2);
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+h1 { font-size: var(--font-size-3xl); }
+h2 { font-size: var(--font-size-2xl); }
+h3 { font-size: var(--font-size-xl); }
+h4 { font-size: var(--font-size-lg); }
+
+p {
+  margin-bottom: var(--space-md);
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+code {
+  font-family: var(--font-mono);
+  background: var(--bg-tertiary);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* ============================================
+   TERMINAL COMPONENTS
+   ============================================ */
+
+/* Blinking cursor */
+.cursor {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.1em;
+  background-color: var(--text-primary);
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Terminal prompt */
+.prompt {
+  white-space: nowrap;
+}
+
+.prompt-user {
+  color: var(--prompt-user);
+}
+
+.prompt-at {
+  color: var(--prompt-at);
+}
+
+.prompt-host {
+  color: var(--prompt-host);
+}
+
+.prompt-path {
+  color: var(--prompt-path);
+}
+
+.prompt-symbol {
+  color: var(--prompt-symbol);
+}
+
+/* Command text */
+.command {
+  color: var(--syntax-yellow);
+}
+
+.flag {
+  color: var(--syntax-orange);
+}
+
+.argument {
+  color: var(--syntax-cyan);
+}
+
+.string {
+  color: var(--syntax-green);
+}
+
+.comment {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Terminal window frame */
+.terminal-window {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.terminal-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.terminal-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  cursor: default;
+}
+
+.terminal-button.close { background: #ff5f56; }
+.terminal-button.minimize { background: #ffbd2e; }
+.terminal-button.maximize { background: #27c93f; }
+
+.terminal-title {
+  flex: 1;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.terminal-body {
+  padding: var(--space-lg);
+  min-height: 200px;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.text-green { color: var(--syntax-green); }
+.text-blue { color: var(--syntax-blue); }
+.text-purple { color: var(--syntax-purple); }
+.text-orange { color: var(--syntax-orange); }
+.text-red { color: var(--syntax-red); }
+.text-yellow { color: var(--syntax-yellow); }
+.text-cyan { color: var(--syntax-cyan); }
+.text-pink { color: var(--syntax-pink); }
+.text-muted { color: var(--text-muted); }
+.text-secondary { color: var(--text-secondary); }
+
+.hidden { display: none; }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #ffffff;
+    --text-primary: #000000;
+    --text-secondary: #333333;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  .terminal-window {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  .terminal-header,
+  .no-print {
+    display: none !important;
+  }
+
+  .cursor {
+    display: none;
+  }
+
+  a {
+    color: black;
+    text-decoration: underline;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+
+  .terminal-body {
+    padding: var(--space-md);
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,143 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AsciiArt from '../components/AsciiArt.astro';
+import CommandLine from '../components/CommandLine.astro';
+import TerminalInput from '../components/TerminalInput.astro';
+import { asciiArt } from '../data/resume';
+
+// Projects data - can be moved to a separate file or content collection later
+const projects = [
+  {
+    name: "josephmyers.dev",
+    description: "This site. Terminal-themed portfolio built with Astro.",
+    tech: ["Astro", "TypeScript", "CSS"],
+    status: "active",
+    url: "https://josephmyers.dev",
+  },
+  {
+    name: "astrometry-imagej",
+    description: "ImageJ plugins for astronomical image analysis and star position measurement.",
+    tech: ["Java", "ImageJ"],
+    status: "archived",
+    url: null,
+  },
+  // Add more projects here
+];
+---
+
+<Layout title="Projects" prompt="projects" description="Projects by Joseph Myers">
+  <AsciiArt art={asciiArt.projects} color="orange" />
+
+  <CommandLine command="tree" args="projects/ -L 1" section="projects" />
+
+  <div class="output tree-view">
+    <p class="text-cyan">projects/</p>
+    {projects.map((project, index) => (
+      <div class="tree-item">
+        <span class="tree-branch text-muted">{index === projects.length - 1 ? '└──' : '├──'}</span>
+        <span class={`tree-name ${project.status === 'active' ? 'text-green' : 'text-secondary'}`}>
+          {project.name}/
+        </span>
+        <span class="tree-status text-muted">
+          [{project.status}]
+        </span>
+      </div>
+    ))}
+  </div>
+
+  {projects.map((project) => (
+    <>
+      <CommandLine command="cat" args={`${project.name}/README.md`} section="projects" />
+      <div class="output project-detail">
+        <h3 class="project-name">
+          <span class="text-yellow"># {project.name}</span>
+          {project.url && (
+            <a href={project.url} target="_blank" rel="noopener" class="project-link text-blue">
+              [{project.url.replace('https://', '')}]
+            </a>
+          )}
+        </h3>
+        <p class="project-desc">{project.description}</p>
+        <p class="project-tech">
+          <span class="text-muted">Tech:</span>
+          {project.tech.map((t) => (
+            <span class="tech-tag text-purple">[{t}]</span>
+          ))}
+        </p>
+      </div>
+    </>
+  ))}
+
+  <div class="coming-soon">
+    <CommandLine command="echo" args='"More projects coming soon..."' section="projects" />
+    <p class="output text-muted">"More projects coming soon..."</p>
+  </div>
+
+  <TerminalInput section="projects" />
+</Layout>
+
+<style>
+  .output {
+    padding-left: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .tree-view {
+    font-size: var(--font-size-sm);
+  }
+
+  .tree-item {
+    padding: var(--space-xs) 0;
+    padding-left: var(--space-md);
+  }
+
+  .tree-branch {
+    margin-right: var(--space-sm);
+  }
+
+  .tree-status {
+    margin-left: var(--space-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  .project-detail {
+    border-left: 2px solid var(--border-color);
+    max-width: 65ch;
+  }
+
+  .project-name {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-sm);
+    font-size: var(--font-size-lg);
+  }
+
+  .project-link {
+    font-size: var(--font-size-sm);
+    font-weight: normal;
+    text-decoration: none;
+  }
+
+  .project-link:hover {
+    text-decoration: underline;
+  }
+
+  .project-desc {
+    margin-bottom: var(--space-sm);
+  }
+
+  .project-tech {
+    font-size: var(--font-size-sm);
+  }
+
+  .tech-tag {
+    margin-left: var(--space-xs);
+  }
+
+  .coming-soon {
+    margin-top: var(--space-xl);
+    opacity: 0.7;
+  }
+</style>

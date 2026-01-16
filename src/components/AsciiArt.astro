@@ -1,0 +1,37 @@
+---
+// ASCII art display component
+interface Props {
+  art: string;
+  color?: 'green' | 'blue' | 'purple' | 'orange' | 'cyan' | 'yellow' | 'pink' | 'primary';
+  class?: string;
+}
+
+const { art, color = 'green', class: className = '' } = Astro.props;
+
+const colorClass = color === 'primary' ? '' : `text-${color}`;
+---
+
+<pre class:list={['ascii-art', colorClass, className]} aria-hidden="true">{art}</pre>
+
+<style>
+  .ascii-art {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    line-height: 1.2;
+    margin-bottom: var(--space-lg);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  @media (max-width: 600px) {
+    .ascii-art {
+      font-size: 0.6rem;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .ascii-art {
+      display: none;
+    }
+  }
+</style>

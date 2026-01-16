@@ -1,0 +1,128 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AsciiArt from '../../components/AsciiArt.astro';
+import CommandLine from '../../components/CommandLine.astro';
+import TerminalInput from '../../components/TerminalInput.astro';
+import { getCollection } from 'astro:content';
+import { asciiArt } from '../../data/resume';
+
+const posts = (await getCollection('blog'))
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+  });
+}
+---
+
+<Layout title="Blog" prompt="blog" description="Blog posts by Joseph Myers">
+  <AsciiArt art={asciiArt.blog} color="cyan" />
+
+  <CommandLine command="ls" args="-la blog/" section="blog" />
+
+  <div class="output">
+    {posts.length === 0 ? (
+      <p class="text-muted">No posts yet. Check back soon.</p>
+    ) : (
+      <div class="post-list">
+        <div class="post-header text-muted">
+          <span class="post-perms">-rw-r--r--</span>
+          <span class="post-date">DATE</span>
+          <span class="post-title">FILENAME</span>
+        </div>
+        {posts.map((post) => (
+          <a href={`/blog/${post.slug}`} class="post-entry">
+            <span class="post-perms text-blue">-rw-r--r--</span>
+            <span class="post-date text-muted">{formatDate(post.data.pubDate)}</span>
+            <span class="post-title text-green">{post.slug}.md</span>
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+
+  {posts.length > 0 && (
+    <>
+      <CommandLine command="head" args={`-n 3 ${posts[0].slug}.md`} section="blog" />
+      <div class="output preview">
+        <p class="text-yellow"># {posts[0].data.title}</p>
+        <p class="text-secondary">{posts[0].data.description}</p>
+        <p class="text-muted">
+          Tags: {posts[0].data.tags.map(tag => `[${tag}]`).join(' ')}
+        </p>
+      </div>
+    </>
+  )}
+
+  <TerminalInput section="blog" />
+</Layout>
+
+<style>
+  .output {
+    padding-left: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .post-list {
+    font-size: var(--font-size-sm);
+  }
+
+  .post-header,
+  .post-entry {
+    display: grid;
+    grid-template-columns: 100px 100px 1fr;
+    gap: var(--space-md);
+    padding: var(--space-xs) 0;
+  }
+
+  .post-header {
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: var(--space-sm);
+  }
+
+  .post-entry {
+    text-decoration: none;
+    transition: background var(--transition-fast);
+    margin: 0 calc(-1 * var(--space-sm));
+    padding-left: var(--space-sm);
+    padding-right: var(--space-sm);
+    border-radius: 4px;
+  }
+
+  .post-entry:hover {
+    background: var(--bg-tertiary);
+    text-decoration: none;
+  }
+
+  .post-entry:hover .post-title {
+    text-decoration: underline;
+  }
+
+  .preview {
+    border-left: 2px solid var(--border-color);
+  }
+
+  .preview p {
+    margin-bottom: var(--space-xs);
+  }
+
+  @media (max-width: 600px) {
+    .post-header,
+    .post-entry {
+      grid-template-columns: 1fr;
+      gap: var(--space-xs);
+    }
+
+    .post-perms {
+      display: none;
+    }
+
+    .post-header {
+      display: none;
+    }
+  }
+</style>

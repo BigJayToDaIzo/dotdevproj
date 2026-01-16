@@ -1,0 +1,249 @@
+---
+// Interactive terminal input component
+// Allows users to type commands to navigate the site
+
+interface Props {
+  section?: string;
+}
+
+const { section = 'home' } = Astro.props;
+---
+
+<div class="terminal-input-wrapper">
+  <div class="input-line">
+    <span class="prompt">
+      <span class="prompt-user">joseph</span><span class="prompt-at">@</span><span class="prompt-host">{section}</span><span class="prompt-path">:~</span><span class="prompt-symbol">$</span>
+    </span>
+    <input
+      type="text"
+      class="terminal-input"
+      id="terminal-input"
+      autocomplete="off"
+      autocapitalize="off"
+      spellcheck="false"
+      placeholder="type 'help' for commands..."
+    />
+  </div>
+  <div class="output-line" id="terminal-output"></div>
+</div>
+
+<script>
+  const input = document.getElementById('terminal-input') as HTMLInputElement;
+  const output = document.getElementById('terminal-output') as HTMLDivElement;
+
+  const routes: Record<string, string> = {
+    '': '/',
+    '~': '/',
+    'home': '/',
+    '/': '/',
+    'about': '/about',
+    'about.md': '/about',
+    '/about': '/about',
+    'blog': '/blog',
+    'blog/': '/blog',
+    '/blog': '/blog',
+    'projects': '/projects',
+    'projects/': '/projects',
+    '/projects': '/projects',
+    'hire': '/hire',
+    'hire.md': '/hire',
+    '/hire': '/hire',
+  };
+
+  const commands: Record<string, (args: string[]) => string | null> = {
+    help: () => `Available commands:
+  cd [page]     - navigate to page (about, blog, projects, hire)
+  ls            - list available pages
+  cat [file]    - view a page (e.g., cat about.md)
+  clear         - clear output
+  whoami        - display user info
+  pwd           - print working directory
+  help          - show this help`,
+
+    ls: () => `about/  blog/  projects/  hire.md`,
+
+    cd: (args) => {
+      const target = args[0]?.toLowerCase() || '~';
+      const route = routes[target] || routes[target.replace('/', '')];
+      if (route) {
+        window.location.href = route;
+        return null;
+      }
+      return `cd: no such directory: ${target}`;
+    },
+
+    cat: (args) => {
+      const file = args[0]?.toLowerCase();
+      if (!file) return 'cat: missing file operand';
+      const route = routes[file] || routes[file.replace('.md', '')];
+      if (route) {
+        window.location.href = route;
+        return null;
+      }
+      return `cat: ${file}: No such file or directory`;
+    },
+
+    clear: () => {
+      output.textContent = '';
+      return null;
+    },
+
+    whoami: () => 'guest',
+
+    pwd: () => {
+      const path = window.location.pathname;
+      return path === '/' ? '/home/joseph' : `/home/joseph${path}`;
+    },
+
+    echo: (args) => args.join(' '),
+
+    tree: (args) => {
+      const target = args[0]?.toLowerCase() || '';
+      if (target === 'projects/' || target === 'projects') {
+        window.location.href = '/projects';
+        return null;
+      }
+      return `.
+├── about/
+├── blog/
+├── projects/
+└── hire.md`;
+    },
+
+    man: (args) => {
+      const cmd = args[0];
+      if (!cmd) return 'What manual page do you want?';
+      if (commands[cmd]) return `${cmd} - try 'help' for usage`;
+      return `No manual entry for ${cmd}`;
+    },
+
+    exit: () => {
+      window.location.href = '/';
+      return null;
+    },
+  };
+
+  // Command history
+  const history: string[] = [];
+  let historyIndex = -1;
+
+  function executeCommand(cmdLine: string) {
+    const trimmed = cmdLine.trim();
+    if (!trimmed) return;
+
+    history.unshift(trimmed);
+    historyIndex = -1;
+
+    const parts = trimmed.split(/\s+/);
+    const cmd = parts[0].toLowerCase();
+    const args = parts.slice(1);
+
+    const handler = commands[cmd];
+    if (handler) {
+      const result = handler(args);
+      if (result !== null) {
+        showOutput(result);
+      }
+    } else {
+      showOutput(`command not found: ${cmd}. Try 'help'`);
+    }
+  }
+
+  function showOutput(text: string) {
+    output.textContent = text;
+    output.classList.add('visible');
+  }
+
+  input?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      executeCommand(input.value);
+      input.value = '';
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (history.length > 0 && historyIndex < history.length - 1) {
+        historyIndex++;
+        input.value = history[historyIndex];
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex > 0) {
+        historyIndex--;
+        input.value = history[historyIndex];
+      } else if (historyIndex === 0) {
+        historyIndex = -1;
+        input.value = '';
+      }
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      // Simple tab completion
+      const val = input.value.toLowerCase();
+      const completions = Object.keys(routes).filter(r => r.startsWith(val) && r !== '');
+      if (completions.length === 1) {
+        input.value = completions[0];
+      }
+    } else if (e.key === 'l' && e.ctrlKey) {
+      e.preventDefault();
+      output.textContent = '';
+      output.classList.remove('visible');
+    }
+  });
+
+  // Focus input on any keypress when not in another input
+  document.addEventListener('keydown', (e) => {
+    if (e.target === input) return;
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key.length === 1) {
+      input?.focus();
+    }
+  });
+</script>
+
+<style>
+  .terminal-input-wrapper {
+    margin-top: var(--space-xl);
+    border-top: 1px solid var(--border-color);
+    padding-top: var(--space-lg);
+  }
+
+  .input-line {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-base);
+    outline: none;
+    caret-color: var(--syntax-green);
+  }
+
+  .terminal-input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.5;
+  }
+
+  .output-line {
+    margin-top: var(--space-md);
+    padding-left: var(--space-md);
+    white-space: pre-wrap;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    display: none;
+  }
+
+  .output-line.visible {
+    display: block;
+  }
+
+  @media print {
+    .terminal-input-wrapper {
+      display: none;
+    }
+  }
+</style>

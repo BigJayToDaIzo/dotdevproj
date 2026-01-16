@@ -1,0 +1,302 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AsciiArt from '../components/AsciiArt.astro';
+import CommandLine from '../components/CommandLine.astro';
+import TerminalInput from '../components/TerminalInput.astro';
+import { asciiArt, resume } from '../data/resume';
+---
+
+<Layout title="Hire Me" prompt="hire" description="Joseph Myers - Resume and Contact">
+  <AsciiArt art={asciiArt.hire} color="yellow" />
+
+  <div class="export-bar no-print">
+    <CommandLine command="export" args="resume.pdf" section="hire" />
+    <button id="export-pdf" class="export-button">
+      <span class="text-green">&gt;</span> Export to PDF
+    </button>
+  </div>
+
+  <div class="resume" id="resume-content">
+    <!-- Header -->
+    <section class="resume-section">
+      <CommandLine command="cat" args="header.txt" section="hire" />
+      <div class="output">
+        <h1 class="name text-green">{resume.contact.name}</h1>
+        <p class="title text-secondary">{resume.contact.title}</p>
+        <div class="contact-links">
+          <a href={`mailto:${resume.contact.email}`} class="text-blue">{resume.contact.email}</a>
+          <span class="text-muted"> | </span>
+          <a href={resume.contact.linkedin} target="_blank" rel="noopener" class="text-blue">LinkedIn</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section class="resume-section">
+      <CommandLine command="cat" args="experience.json" section="hire" />
+      <div class="output">
+        {resume.experience.map((job) => (
+          <div class="job">
+            <div class="job-header">
+              <span class="job-company text-yellow">{job.company}</span>
+              <span class="text-muted"> | </span>
+              <span class="job-role text-purple">{job.role}</span>
+            </div>
+            <div class="job-dates text-muted">{job.startDate} - {job.endDate}</div>
+            {job.bullets.length > 0 && (
+              <ul class="job-bullets">
+                {job.bullets.map((bullet) => (
+                  <li>{bullet}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Education -->
+    <section class="resume-section">
+      <CommandLine command="cat" args="education.txt" section="hire" />
+      <div class="output">
+        {resume.education.map((edu) => (
+          <div class="education">
+            <div class="edu-header">
+              <span class="edu-school text-yellow">{edu.institution}</span>
+            </div>
+            <div class="edu-degree">
+              <span class="text-purple">{edu.degree}</span>
+              <span class="text-muted"> in </span>
+              <span class="text-green">{edu.field}</span>
+              {edu.minor && (
+                <>
+                  <span class="text-muted">, Minor in </span>
+                  <span class="text-cyan">{edu.minor}</span>
+                </>
+              )}
+            </div>
+            <div class="edu-dates text-muted">{edu.startYear} - {edu.endYear}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="resume-section">
+      <CommandLine command="cat" args="skills.json" section="hire" />
+      <div class="output">
+        <div class="skills-grid">
+          {resume.skills.map((category) => (
+            <div class="skill-category">
+              <span class="skill-level text-orange">{category.level}:</span>
+              <span class="skill-list">
+                {category.skills.map((skill, i) => (
+                  <span class="text-green">
+                    {skill}{i < category.skills.length - 1 ? ', ' : ''}
+                  </span>
+                ))}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div class="tools-section">
+          <span class="text-orange">Tools:</span>
+          <span class="text-secondary">{resume.tools.join(', ')}</span>
+        </div>
+
+        <div class="misc-section">
+          <span class="text-orange">Other:</span>
+          <span class="text-secondary">{resume.misc.join(', ')}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- References -->
+    <section class="resume-section">
+      <CommandLine command="echo" args='"References available upon request"' section="hire" />
+      <div class="output">
+        <p class="text-muted">"References available upon request"</p>
+      </div>
+    </section>
+  </div>
+
+  <TerminalInput section="hire" />
+</Layout>
+
+<script>
+  const exportButton = document.getElementById('export-pdf');
+
+  exportButton?.addEventListener('click', () => {
+    window.print();
+  });
+</script>
+
+<style>
+  .export-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+  }
+
+  .export-button {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    padding: var(--space-sm) var(--space-md);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all var(--transition-fast);
+  }
+
+  .export-button:hover {
+    background: var(--bg-highlight);
+    border-color: var(--syntax-green);
+  }
+
+  .resume-section {
+    margin-bottom: var(--space-xl);
+  }
+
+  .output {
+    padding-left: var(--space-md);
+  }
+
+  /* Header */
+  .name {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-xs);
+  }
+
+  .title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-sm);
+  }
+
+  .contact-links a {
+    text-decoration: none;
+  }
+
+  .contact-links a:hover {
+    text-decoration: underline;
+  }
+
+  /* Jobs */
+  .job {
+    margin-bottom: var(--space-lg);
+  }
+
+  .job:last-child {
+    margin-bottom: 0;
+  }
+
+  .job-header {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-xs);
+  }
+
+  .job-dates {
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .job-bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .job-bullets li {
+    padding: var(--space-xs) 0;
+    padding-left: var(--space-md);
+    position: relative;
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+  }
+
+  .job-bullets li::before {
+    content: "-";
+    position: absolute;
+    left: 0;
+    color: var(--syntax-orange);
+  }
+
+  /* Education */
+  .education {
+    margin-bottom: var(--space-md);
+  }
+
+  .edu-school {
+    font-size: var(--font-size-lg);
+  }
+
+  .edu-dates {
+    font-size: var(--font-size-sm);
+  }
+
+  /* Skills */
+  .skills-grid {
+    margin-bottom: var(--space-md);
+  }
+
+  .skill-category {
+    padding: var(--space-xs) 0;
+  }
+
+  .skill-level {
+    display: inline-block;
+    min-width: 100px;
+  }
+
+  .tools-section,
+  .misc-section {
+    padding: var(--space-xs) 0;
+    font-size: var(--font-size-sm);
+  }
+
+  /* Print styles */
+  @media print {
+    .resume {
+      max-width: none;
+    }
+
+    .resume-section {
+      margin-bottom: var(--space-lg);
+      page-break-inside: avoid;
+    }
+
+    .job {
+      page-break-inside: avoid;
+    }
+
+    .name {
+      font-size: 24pt;
+    }
+
+    .title {
+      font-size: 14pt;
+    }
+
+    .job-header {
+      font-size: 12pt;
+    }
+
+    .job-bullets li {
+      font-size: 10pt;
+    }
+
+    .output {
+      border-left: none;
+      padding-left: 0;
+    }
+
+    /* Hide command lines in print */
+    .resume-section > :first-child {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,29 @@
+---
+// Command line display component
+// Shows a command with prompt like: joseph@home:~$ command argument
+
+interface Props {
+  command: string;
+  args?: string;
+  section?: string;
+  class?: string;
+}
+
+const { command, args = '', section = 'home', class: className = '' } = Astro.props;
+---
+
+<div class:list={['command-line', className]}>
+  <span class="prompt">
+    <span class="prompt-user">joseph</span><span class="prompt-at">@</span><span class="prompt-host">{section}</span><span class="prompt-path">:~</span><span class="prompt-symbol">$</span>
+  </span>
+  <span class="command">{command}</span>
+  {args && <span class="argument"> {args}</span>}
+</div>
+
+<style>
+  .command-line {
+    margin-bottom: var(--space-md);
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+</style>

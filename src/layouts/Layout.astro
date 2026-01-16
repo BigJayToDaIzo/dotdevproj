@@ -1,142 +1,260 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content="Joseph Myers - Software Engineer Resume" />
-		<title>Joseph Myers | Software Engineer</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  prompt?: string;
+}
+
+const {
+  title,
+  description = "Joseph Myers - Software Developer",
+  prompt = "home"
+} = Astro.props;
+
+const terminalTitle = `joseph@${prompt}:~`;
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <title>{title} | josephmyers.dev</title>
+  </head>
+  <body>
+    <div class="site-wrapper">
+      <header class="site-header no-print">
+        <nav class="nav-container">
+          <a href="/" class="nav-logo">
+            <span class="prompt-user">joseph</span><span class="prompt-at">@</span><span class="prompt-host">myers.dev</span>
+          </a>
+
+          <div class="nav-links">
+            <a href="/" class="nav-link" data-cmd="cd ~">
+              <span class="text-muted">$</span> <span class="command">cd</span> <span class="argument">~</span>
+            </a>
+            <a href="/about" class="nav-link" data-cmd="cat about.md">
+              <span class="text-muted">$</span> <span class="command">cat</span> <span class="argument">about.md</span>
+            </a>
+            <a href="/blog" class="nav-link" data-cmd="ls blog/">
+              <span class="text-muted">$</span> <span class="command">ls</span> <span class="argument">blog/</span>
+            </a>
+            <a href="/projects" class="nav-link" data-cmd="tree projects/">
+              <span class="text-muted">$</span> <span class="command">tree</span> <span class="argument">projects/</span>
+            </a>
+            <a href="/hire" class="nav-link" data-cmd="cat hire.md">
+              <span class="text-muted">$</span> <span class="command">cat</span> <span class="argument">hire.md</span>
+            </a>
+          </div>
+
+          <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+            <span class="theme-icon dark-icon">[ dark ]</span>
+            <span class="theme-icon light-icon">[ light ]</span>
+          </button>
+        </nav>
+      </header>
+
+      <main class="site-main">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-buttons">
+              <span class="terminal-button close"></span>
+              <span class="terminal-button minimize"></span>
+              <span class="terminal-button maximize"></span>
+            </div>
+            <span class="terminal-title">{terminalTitle}</span>
+            <div style="width: 52px;"></div>
+          </div>
+          <div class="terminal-body">
+            <slot />
+          </div>
+        </div>
+      </main>
+
+      <footer class="site-footer no-print">
+        <div class="footer-content">
+          <span class="text-muted"># Last login: {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</span>
+          <span class="text-muted"># <a href="mailto:webinquiries@josephmyers.dev">webinquiries@josephmyers.dev</a></span>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // Theme toggle functionality
+      const themeToggle = document.getElementById('theme-toggle');
+      const html = document.documentElement;
+
+      // Check for saved preference or system preference
+      const savedTheme = localStorage.getItem('theme');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+
+      html.setAttribute('data-theme', initialTheme);
+
+      themeToggle?.addEventListener('click', () => {
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+      });
+
+      // Optional: Listen for system theme changes
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+          html.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        }
+      });
+    </script>
+
+    <style>
+      .site-wrapper {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        padding: var(--space-md);
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      /* Header & Navigation */
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: var(--bg-primary);
+        padding-bottom: var(--space-md);
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: var(--space-lg);
+      }
+
+      .nav-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: var(--space-md);
+      }
+
+      .nav-logo {
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .nav-logo:hover {
+        text-decoration: none;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: var(--space-lg);
+        flex-wrap: wrap;
+      }
+
+      .nav-link {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: var(--font-size-sm);
+        transition: color var(--transition-fast);
+        white-space: nowrap;
+      }
+
+      .nav-link:hover {
+        color: var(--text-primary);
+        text-decoration: none;
+      }
+
+      .nav-link:hover .command {
+        color: var(--syntax-green);
+      }
+
+      .theme-toggle {
+        background: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        font-family: var(--font-mono);
+        font-size: var(--font-size-xs);
+        padding: var(--space-xs) var(--space-sm);
+        cursor: pointer;
+        border-radius: 4px;
+        transition: all var(--transition-fast);
+      }
+
+      .theme-toggle:hover {
+        border-color: var(--text-secondary);
+        color: var(--text-primary);
+      }
+
+      .light-icon { display: none; }
+      .dark-icon { display: inline; }
+
+      [data-theme="light"] .light-icon { display: inline; }
+      [data-theme="light"] .dark-icon { display: none; }
+
+      /* Main Content */
+      .site-main {
+        flex: 1;
+      }
+
+      /* Footer */
+      .site-footer {
+        margin-top: var(--space-xl);
+        padding-top: var(--space-md);
+        border-top: 1px solid var(--border-color);
+      }
+
+      .footer-content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+        font-size: var(--font-size-sm);
+      }
+
+      .footer-content a {
+        color: var(--text-muted);
+      }
+
+      .footer-content a:hover {
+        color: var(--link);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .nav-container {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .nav-links {
+          gap: var(--space-md);
+        }
+
+        .theme-toggle {
+          position: absolute;
+          top: var(--space-md);
+          right: var(--space-md);
+        }
+      }
+
+      /* Print styles */
+      @media print {
+        .site-wrapper {
+          padding: 0;
+        }
+
+        .site-header,
+        .site-footer {
+          display: none;
+        }
+      }
+    </style>
+  </body>
 </html>
-
-<style is:global>
-	:root {
-		/* Colors */
-		--color-bg: #ffffff;
-		--color-text: #1a1a1a;
-		--color-text-muted: #6b7280;
-		--color-accent: #3b82f6;
-		--color-border: #e5e7eb;
-		--color-hover: #2563eb;
-
-		/* Spacing */
-		--spacing-xs: 0.5rem;
-		--spacing-sm: 1rem;
-		--spacing-md: 2rem;
-		--spacing-lg: 3rem;
-		--spacing-xl: 4rem;
-
-		/* Typography */
-		--font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-		--line-height-tight: 1.2;
-		--line-height-normal: 1.6;
-	}
-
-	* {
-		box-sizing: border-box;
-	}
-
-	html {
-		font-family: var(--font-system);
-		background-color: var(--color-bg);
-		color: var(--color-text);
-		line-height: var(--line-height-normal);
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-	}
-
-	body {
-		margin: 0;
-		padding: 0;
-	}
-
-	h1, h2, h3, h4, h5, h6 {
-		margin: 0;
-		line-height: var(--line-height-tight);
-		font-weight: 600;
-		color: var(--color-text);
-	}
-
-	h1 {
-		font-size: clamp(2rem, 5vw, 2.5rem);
-	}
-
-	h2 {
-		font-size: clamp(1.5rem, 4vw, 1.875rem);
-	}
-
-	h3 {
-		font-size: clamp(1.25rem, 3vw, 1.5rem);
-	}
-
-	p {
-		margin: 0;
-	}
-
-	a {
-		color: var(--color-accent);
-		text-decoration: none;
-		transition: color 0.2s ease;
-	}
-
-	a:hover {
-		color: var(--color-hover);
-		text-decoration: underline;
-	}
-
-	ul, ol {
-		margin: 0;
-		padding-left: 1.5rem;
-	}
-
-	li {
-		margin-bottom: 0.5rem;
-	}
-
-	/* Print Styles */
-	@media print {
-		:root {
-			--color-text: #000;
-			--color-text-muted: #333;
-			--color-accent: #000;
-		}
-
-		body {
-			background: white;
-			font-size: 11pt;
-		}
-
-		a {
-			color: #000;
-			text-decoration: none;
-		}
-
-		a[href]:after {
-			content: " (" attr(href) ")";
-			font-size: 0.8em;
-			color: #666;
-		}
-
-		h1 {
-			font-size: 24pt;
-		}
-
-		h2 {
-			font-size: 18pt;
-			page-break-after: avoid;
-		}
-
-		h3 {
-			font-size: 14pt;
-			page-break-after: avoid;
-		}
-
-		section {
-			page-break-inside: avoid;
-		}
-	}
-</style>

@@ -1,11 +1,93 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import AsciiArt from '../components/AsciiArt.astro';
+import CommandLine from '../components/CommandLine.astro';
+import TerminalInput from '../components/TerminalInput.astro';
+import { asciiArt, resume } from '../data/resume';
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Home" prompt="home">
+  <AsciiArt art={asciiArt.home} color="green" />
+
+  <CommandLine command="whoami" section="home" />
+
+  <div class="output">
+    <p>
+      <span class="text-green">{resume.contact.name}</span>
+      <span class="text-muted"> - </span>
+      <span class="text-secondary">{resume.contact.title}</span>
+    </p>
+    <p class="text-muted">CTO @ Aria Cosmetic Surgery | Former Boeing | Astronomy Nerd</p>
+  </div>
+
+  <CommandLine command="cat" args="welcome.txt" section="home" />
+
+  <div class="output welcome-text">
+    <p>Welcome to my corner of the internet.</p>
+    <p>I'm a software developer who's worked on everything from CI/CD pipelines at Boeing to astrometry plugins for analyzing star images.</p>
+    <p>Currently building things as CTO at Aria Cosmetic Surgery.</p>
+  </div>
+
+  <CommandLine command="ls" args="-la" section="home" />
+
+  <div class="output directory-listing">
+    <div class="dir-entry">
+      <span class="text-blue">drwxr-xr-x</span>
+      <span class="text-muted">  joseph  staff  </span>
+      <a href="/about" class="text-cyan">about/</a>
+      <span class="text-muted"> - who I am</span>
+    </div>
+    <div class="dir-entry">
+      <span class="text-blue">drwxr-xr-x</span>
+      <span class="text-muted">  joseph  staff  </span>
+      <a href="/blog" class="text-cyan">blog/</a>
+      <span class="text-muted"> - thoughts & tutorials</span>
+    </div>
+    <div class="dir-entry">
+      <span class="text-blue">drwxr-xr-x</span>
+      <span class="text-muted">  joseph  staff  </span>
+      <a href="/projects" class="text-cyan">projects/</a>
+      <span class="text-muted"> - things I've built</span>
+    </div>
+    <div class="dir-entry">
+      <span class="text-green">-rw-r--r--</span>
+      <span class="text-muted">  joseph  staff  </span>
+      <a href="/hire" class="text-yellow">hire.md</a>
+      <span class="text-muted"> - resume & contact</span>
+    </div>
+  </div>
+
+  <TerminalInput section="home" />
 </Layout>
+
+<style>
+  .output {
+    margin-bottom: var(--space-lg);
+    padding-left: var(--space-md);
+  }
+
+  .output p {
+    margin-bottom: var(--space-sm);
+  }
+
+  .welcome-text p {
+    max-width: 65ch;
+  }
+
+  .directory-listing {
+    font-size: var(--font-size-sm);
+  }
+
+  .dir-entry {
+    padding: var(--space-xs) 0;
+    white-space: nowrap;
+  }
+
+  .dir-entry a {
+    text-decoration: none;
+  }
+
+  .dir-entry a:hover {
+    text-decoration: underline;
+  }
+</style>

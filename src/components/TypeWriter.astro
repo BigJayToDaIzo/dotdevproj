@@ -1,0 +1,71 @@
+---
+// Typing animation component
+// Text appears character by character with a blinking cursor at the end
+
+interface Props {
+  text: string;
+  speed?: number;  // ms per character
+  delay?: number;  // ms before starting
+  class?: string;
+  tag?: 'span' | 'p' | 'h1' | 'h2' | 'h3' | 'div';
+  showCursor?: boolean;
+}
+
+const {
+  text,
+  speed = 50,
+  delay = 0,
+  class: className = '',
+  tag = 'span',
+  showCursor = true
+} = Astro.props;
+
+const Tag = tag;
+const uniqueId = `typewriter-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<Tag
+  class:list={['typewriter', className]}
+  id={uniqueId}
+  data-text={text}
+  data-speed={speed}
+  data-delay={delay}
+  data-show-cursor={showCursor}
+>
+  <span class="typewriter-text"></span>{showCursor && <span class="cursor" aria-hidden="true"></span>}
+</Tag>
+
+<script>
+  // TypeWriter animation
+  document.querySelectorAll('.typewriter').forEach((element) => {
+    const textEl = element.querySelector('.typewriter-text');
+    const fullText = element.getAttribute('data-text') || '';
+    const speed = parseInt(element.getAttribute('data-speed') || '50', 10);
+    const delay = parseInt(element.getAttribute('data-delay') || '0', 10);
+
+    let index = 0;
+
+    function type() {
+      if (index < fullText.length) {
+        if (textEl) {
+          textEl.textContent += fullText.charAt(index);
+        }
+        index++;
+        setTimeout(type, speed);
+      }
+    }
+
+    // Start typing after delay
+    setTimeout(type, delay);
+  });
+</script>
+
+<style>
+  .typewriter {
+    display: inline-block;
+  }
+
+  .typewriter-text {
+    white-space: pre-wrap;
+  }
+</style>

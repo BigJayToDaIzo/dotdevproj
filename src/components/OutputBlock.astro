@@ -1,0 +1,39 @@
+---
+// Output block component for displaying terminal command output
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class:list={['output-block', className]}>
+  <slot />
+</div>
+
+<style>
+  .output-block {
+    margin-bottom: var(--space-lg);
+    padding-left: var(--space-md);
+    border-left: 2px solid var(--border-color);
+  }
+
+  .output-block :global(p) {
+    margin-bottom: var(--space-sm);
+  }
+
+  .output-block :global(ul) {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-md) 0;
+  }
+
+  .output-block :global(li) {
+    padding: var(--space-xs) 0;
+  }
+
+  .output-block :global(li::before) {
+    content: "- ";
+    color: var(--text-muted);
+  }
+</style>

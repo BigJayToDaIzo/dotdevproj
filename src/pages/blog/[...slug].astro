@@ -1,0 +1,210 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CommandLine from '../../components/CommandLine.astro';
+import TerminalInput from '../../components/TerminalInput.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: post,
+  }));
+}
+
+const post = Astro.props;
+const { Content } = await post.render();
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+---
+
+<Layout title={post.data.title} prompt="blog" description={post.data.description}>
+  <CommandLine command="cat" args={`${post.slug}.md`} section="blog" />
+
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title text-green">{post.data.title}</h1>
+      <div class="post-meta">
+        <span class="text-muted">Published:</span>
+        <time datetime={post.data.pubDate.toISOString()} class="text-secondary">
+          {formatDate(post.data.pubDate)}
+        </time>
+        {post.data.updatedDate && (
+          <>
+            <span class="text-muted"> | Updated:</span>
+            <time datetime={post.data.updatedDate.toISOString()} class="text-secondary">
+              {formatDate(post.data.updatedDate)}
+            </time>
+          </>
+        )}
+      </div>
+      {post.data.tags.length > 0 && (
+        <div class="post-tags">
+          <span class="text-muted">Tags:</span>
+          {post.data.tags.map((tag: string) => (
+            <span class="tag text-orange">[{tag}]</span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="post-content">
+      <Content />
+    </div>
+  </article>
+
+  <div class="post-nav">
+    <CommandLine command="cd" args=".." section="blog" />
+    <a href="/blog" class="back-link text-cyan">&lt;-- back to blog/</a>
+  </div>
+
+  <TerminalInput section="blog" />
+</Layout>
+
+<style>
+  .post {
+    padding-left: var(--space-md);
+    max-width: 70ch;
+  }
+
+  .post-header {
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .post-title {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  .post-meta {
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .post-tags {
+    font-size: var(--font-size-sm);
+  }
+
+  .tag {
+    margin-left: var(--space-xs);
+  }
+
+  /* Markdown content styling */
+  .post-content {
+    line-height: 1.8;
+  }
+
+  .post-content :global(h1),
+  .post-content :global(h2),
+  .post-content :global(h3),
+  .post-content :global(h4) {
+    color: var(--syntax-yellow);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .post-content :global(h1) { font-size: var(--font-size-2xl); }
+  .post-content :global(h2) { font-size: var(--font-size-xl); }
+  .post-content :global(h3) { font-size: var(--font-size-lg); }
+
+  .post-content :global(p) {
+    margin-bottom: var(--space-md);
+  }
+
+  .post-content :global(ul),
+  .post-content :global(ol) {
+    margin-bottom: var(--space-md);
+    padding-left: var(--space-lg);
+  }
+
+  .post-content :global(li) {
+    margin-bottom: var(--space-xs);
+  }
+
+  .post-content :global(ul) {
+    list-style: none;
+  }
+
+  .post-content :global(ul li::before) {
+    content: "- ";
+    color: var(--syntax-orange);
+    margin-left: calc(-1 * var(--space-md));
+  }
+
+  .post-content :global(a) {
+    color: var(--syntax-blue);
+  }
+
+  .post-content :global(a:hover) {
+    color: var(--syntax-cyan);
+  }
+
+  .post-content :global(strong) {
+    color: var(--syntax-green);
+    font-weight: 600;
+  }
+
+  .post-content :global(em) {
+    color: var(--syntax-purple);
+    font-style: italic;
+  }
+
+  .post-content :global(code) {
+    background: var(--bg-tertiary);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+
+  .post-content :global(pre) {
+    background: var(--bg-tertiary);
+    padding: var(--space-md);
+    border-radius: 6px;
+    overflow-x: auto;
+    margin-bottom: var(--space-md);
+    border: 1px solid var(--border-color);
+  }
+
+  .post-content :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+
+  .post-content :global(blockquote) {
+    border-left: 3px solid var(--syntax-purple);
+    padding-left: var(--space-md);
+    color: var(--text-secondary);
+    font-style: italic;
+    margin: var(--space-md) 0;
+  }
+
+  .post-content :global(hr) {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: var(--space-xl) 0;
+  }
+
+  .post-nav {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border-color);
+  }
+
+  .back-link {
+    display: inline-block;
+    padding-left: var(--space-md);
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+</style>
