@@ -7,46 +7,148 @@ import { asciiArt, resume } from '../data/resume';
 ---
 
 <Layout title="Hire Me" prompt="hire" description="Joseph Myers - Resume and Contact">
-  <AsciiArt art={asciiArt.hire} color="yellow" />
+  <!-- Terminal version (screen only) -->
+  <div class="screen-only">
+    <AsciiArt art={asciiArt.hire} color="yellow" />
 
-  <div class="export-bar no-print">
-    <CommandLine command="export" args="resume.pdf" section="hire" />
-    <button id="export-pdf" class="export-button">
-      <span class="text-green">&gt;</span> Export to PDF
-    </button>
+    <div class="export-bar">
+      <button id="export-pdf" class="export-button">
+        <span class="text-green">&gt;</span> Export to PDF
+      </button>
+    </div>
+
+    <div class="resume">
+      <section class="resume-section">
+        <CommandLine command="cat" args="header.txt" section="hire" />
+        <div class="output">
+          <h1 class="name text-green">{resume.contact.name}</h1>
+          <p class="title text-secondary">{resume.contact.title}</p>
+          <div class="contact-links">
+            <a href={`mailto:${resume.contact.email}`} class="text-blue">{resume.contact.email}</a>
+            <span class="text-muted"> | </span>
+            <a href={resume.contact.linkedin} target="_blank" rel="noopener" class="text-blue">{resume.contact.linkedin}</a>
+            <span class="text-muted"> | </span>
+            <a href={resume.contact.github} target="_blank" rel="noopener" class="text-blue">{resume.contact.github}</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="resume-section">
+        <CommandLine command="cat" args="experience.json" section="hire" />
+        <div class="output">
+          {resume.experience.map((job) => (
+            <div class="job">
+              <div class="job-header">
+                <span class="job-company text-yellow">{job.company}</span>
+                <span class="text-muted"> | </span>
+                <span class="job-role text-purple">{job.role}</span>
+              </div>
+              <div class="job-dates text-muted">{job.startDate} - {job.endDate}</div>
+              {job.bullets.length > 0 && (
+                <ul class="job-bullets">
+                  {job.bullets.map((bullet) => (
+                    <li set:html={bullet} />
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="resume-section">
+        <CommandLine command="cat" args="education.txt" section="hire" />
+        <div class="output">
+          {resume.education.map((edu) => (
+            <div class="education">
+              <span class="edu-school text-yellow">{edu.institution}</span>
+              <div class="edu-degree">
+                <span class="text-purple">{edu.degree}</span>
+                <span class="text-muted"> in </span>
+                <span class="text-green">{edu.field}</span>
+                {edu.minor && (
+                  <>
+                    <span class="text-muted">, Minor in </span>
+                    <span class="text-cyan">{edu.minor}</span>
+                  </>
+                )}
+              </div>
+              <div class="edu-dates text-muted">{edu.startYear} - {edu.endYear}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="resume-section">
+        <CommandLine command="cat" args="skills.json" section="hire" />
+        <div class="output">
+          <div class="skills-grid">
+            {resume.skills.map((category) => (
+              <div class="skill-category">
+                <span class="skill-level text-orange">{category.level}:</span>
+                <span class="skill-list">
+                  {category.skills.map((skill, i) => (
+                    <span class="text-green">
+                      {skill}{i < category.skills.length - 1 ? ', ' : ''}
+                    </span>
+                  ))}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div class="tools-section">
+            <span class="text-orange">Tools:</span>
+            <span class="text-secondary">{resume.tools.join(', ')}</span>
+          </div>
+          <div class="misc-section">
+            <span class="text-orange">Other:</span>
+            <span class="text-secondary">{resume.misc.join(', ')}</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="resume-section">
+        <CommandLine command="echo" args='"References available upon request"' section="hire" />
+        <div class="output">
+          <p class="text-muted">"References available upon request"</p>
+        </div>
+      </section>
+    </div>
+
+    <TerminalInput section="hire" />
   </div>
 
-  <div class="resume" id="resume-content">
-    <!-- Header -->
-    <section class="resume-section">
-      <CommandLine command="cat" args="header.txt" section="hire" />
-      <div class="output">
-        <h1 class="name text-green">{resume.contact.name}</h1>
-        <p class="title text-secondary">{resume.contact.title}</p>
-        <div class="contact-links">
-          <a href={`mailto:${resume.contact.email}`} class="text-blue">{resume.contact.email}</a>
-          <span class="text-muted"> | </span>
-          <a href={resume.contact.linkedin} target="_blank" rel="noopener" class="text-blue">LinkedIn</a>
-        </div>
+  <!-- Print version (traditional resume) -->
+  <div class="print-only print-resume">
+    <header class="print-header">
+      <h1>{resume.contact.name}</h1>
+      <p class="print-title">{resume.contact.title}</p>
+      <div class="print-contact">
+        <span>{resume.contact.email}</span>
+        <span class="separator">•</span>
+        <span>https://www.linkedin.com/in/josephlmyers</span>
+        <span class="separator">•</span>
+        <span>https://github.com/BigJayToDaIzo</span>
+        <span class="separator">•</span>
+        <span>https://josephmyers.dev</span>
       </div>
-    </section>
+    </header>
 
-    <!-- Experience -->
-    <section class="resume-section">
-      <CommandLine command="cat" args="experience.json" section="hire" />
-      <div class="output">
+    <section class="print-section">
+      <h2>Experience</h2>
+      <div class="print-section-content">
         {resume.experience.map((job) => (
-          <div class="job">
-            <div class="job-header">
-              <span class="job-company text-yellow">{job.company}</span>
-              <span class="text-muted"> | </span>
-              <span class="job-role text-purple">{job.role}</span>
+          <div class="print-job">
+            <div class="print-job-header">
+              <div class="print-job-title">
+                <strong>{job.role}</strong> — {job.company}
+              </div>
+              <div class="print-job-dates">{job.startDate} – {job.endDate}</div>
             </div>
-            <div class="job-dates text-muted">{job.startDate} - {job.endDate}</div>
             {job.bullets.length > 0 && (
-              <ul class="job-bullets">
+              <ul class="print-bullets">
                 {job.bullets.map((bullet) => (
-                  <li>{bullet}</li>
+                  <li set:html={bullet} />
                 ))}
               </ul>
             )}
@@ -55,84 +157,61 @@ import { asciiArt, resume } from '../data/resume';
       </div>
     </section>
 
-    <!-- Education -->
-    <section class="resume-section">
-      <CommandLine command="cat" args="education.txt" section="hire" />
-      <div class="output">
+    <section class="print-section">
+      <h2>Education</h2>
+      <div class="print-section-content">
         {resume.education.map((edu) => (
-          <div class="education">
-            <div class="edu-header">
-              <span class="edu-school text-yellow">{edu.institution}</span>
+          <div class="print-education">
+            <div class="print-job-header">
+              <div class="print-job-title">
+                <strong>{edu.degree} in {edu.field}</strong>{edu.minor && `, Minor in ${edu.minor}`} — {edu.institution}
+              </div>
+              <div class="print-job-dates">{edu.startYear} – {edu.endYear}</div>
             </div>
-            <div class="edu-degree">
-              <span class="text-purple">{edu.degree}</span>
-              <span class="text-muted"> in </span>
-              <span class="text-green">{edu.field}</span>
-              {edu.minor && (
-                <>
-                  <span class="text-muted">, Minor in </span>
-                  <span class="text-cyan">{edu.minor}</span>
-                </>
-              )}
-            </div>
-            <div class="edu-dates text-muted">{edu.startYear} - {edu.endYear}</div>
           </div>
         ))}
       </div>
     </section>
 
-    <!-- Skills -->
-    <section class="resume-section">
-      <CommandLine command="cat" args="skills.json" section="hire" />
-      <div class="output">
-        <div class="skills-grid">
-          {resume.skills.map((category) => (
-            <div class="skill-category">
-              <span class="skill-level text-orange">{category.level}:</span>
-              <span class="skill-list">
-                {category.skills.map((skill, i) => (
-                  <span class="text-green">
-                    {skill}{i < category.skills.length - 1 ? ', ' : ''}
-                  </span>
-                ))}
-              </span>
-            </div>
-          ))}
+    <section class="print-section">
+      <h2>Skills</h2>
+      <div class="print-section-content print-skills">
+        {resume.skills.map((category) => (
+          <div class="print-skill-row">
+            <span class="print-skill-label">{category.level}:</span>
+            <span>{category.skills.join(', ')}</span>
+          </div>
+        ))}
+        <div class="print-skill-row">
+          <span class="print-skill-label">Tools:</span>
+          <span>{resume.tools.join(', ')}</span>
         </div>
-
-        <div class="tools-section">
-          <span class="text-orange">Tools:</span>
-          <span class="text-secondary">{resume.tools.join(', ')}</span>
+        <div class="print-skill-row">
+          <span class="print-skill-label">Other:</span>
+          <span>{resume.misc.join(', ')}</span>
         </div>
-
-        <div class="misc-section">
-          <span class="text-orange">Other:</span>
-          <span class="text-secondary">{resume.misc.join(', ')}</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- References -->
-    <section class="resume-section">
-      <CommandLine command="echo" args='"References available upon request"' section="hire" />
-      <div class="output">
-        <p class="text-muted">"References available upon request"</p>
       </div>
     </section>
   </div>
-
-  <TerminalInput section="hire" />
 </Layout>
 
 <script>
   const exportButton = document.getElementById('export-pdf');
-
   exportButton?.addEventListener('click', () => {
     window.print();
   });
 </script>
 
 <style>
+  /* Screen-only terminal styles */
+  .screen-only {
+    display: block;
+  }
+
+  .print-only {
+    display: none;
+  }
+
   .export-bar {
     display: flex;
     align-items: center;
@@ -166,7 +245,6 @@ import { asciiArt, resume } from '../data/resume';
     padding-left: var(--space-md);
   }
 
-  /* Header */
   .name {
     font-size: var(--font-size-2xl);
     margin-bottom: var(--space-xs);
@@ -185,7 +263,6 @@ import { asciiArt, resume } from '../data/resume';
     text-decoration: underline;
   }
 
-  /* Jobs */
   .job {
     margin-bottom: var(--space-lg);
   }
@@ -225,7 +302,6 @@ import { asciiArt, resume } from '../data/resume';
     color: var(--syntax-orange);
   }
 
-  /* Education */
   .education {
     margin-bottom: var(--space-md);
   }
@@ -238,7 +314,6 @@ import { asciiArt, resume } from '../data/resume';
     font-size: var(--font-size-sm);
   }
 
-  /* Skills */
   .skills-grid {
     margin-bottom: var(--space-md);
   }
@@ -258,45 +333,127 @@ import { asciiArt, resume } from '../data/resume';
     font-size: var(--font-size-sm);
   }
 
-  /* Print styles */
+  /* ===================
+     PRINT STYLES
+     =================== */
   @media print {
-    .resume {
-      max-width: none;
+    .screen-only {
+      display: none !important;
     }
 
-    .resume-section {
-      margin-bottom: var(--space-lg);
-      page-break-inside: avoid;
+    .print-only {
+      display: block !important;
     }
 
-    .job {
-      page-break-inside: avoid;
+    .print-resume {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 11pt;
+      line-height: 1.4;
+      color: #000;
+      max-width: 100%;
+      padding: 0;
     }
 
-    .name {
+    .print-header {
+      text-align: center;
+      margin-bottom: 20pt;
+      padding-bottom: 12pt;
+      border-bottom: 2pt solid #000;
+    }
+
+    .print-header h1 {
       font-size: 24pt;
+      font-weight: bold;
+      margin: 0 0 4pt 0;
+      letter-spacing: 1pt;
+      text-transform: uppercase;
     }
 
-    .title {
-      font-size: 14pt;
-    }
-
-    .job-header {
+    .print-title {
       font-size: 12pt;
+      margin: 0 0 8pt 0;
+      font-style: italic;
     }
 
-    .job-bullets li {
+    .print-contact {
       font-size: 10pt;
     }
 
-    .output {
-      border-left: none;
+    .print-contact .separator {
+      margin: 0 8pt;
+    }
+
+    .print-section {
+      margin-bottom: 16pt;
+    }
+
+    .print-section h2 {
+      font-size: 12pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5pt;
+      border-bottom: 1pt solid #000;
+      padding-bottom: 4pt;
+      margin: 0 0 10pt 0;
+    }
+
+    .print-section-content {
       padding-left: 0;
     }
 
-    /* Hide command lines in print */
-    .resume-section > :first-child {
-      display: none;
+    .print-job {
+      margin-bottom: 12pt;
+      page-break-inside: avoid;
+    }
+
+    .print-job:last-child {
+      margin-bottom: 0;
+    }
+
+    .print-job-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4pt;
+    }
+
+    .print-job-title {
+      font-size: 11pt;
+    }
+
+    .print-job-dates {
+      font-size: 10pt;
+      font-style: italic;
+      white-space: nowrap;
+    }
+
+    .print-bullets {
+      margin: 4pt 0 0 0;
+      padding-left: 18pt;
+    }
+
+    .print-bullets li {
+      font-size: 10pt;
+      margin-bottom: 2pt;
+      line-height: 1.4;
+    }
+
+    .print-education {
+      margin-bottom: 8pt;
+    }
+
+    .print-skills {
+      font-size: 10pt;
+    }
+
+    .print-skill-row {
+      margin-bottom: 4pt;
+    }
+
+    .print-skill-label {
+      font-weight: bold;
+      display: inline-block;
+      min-width: 80pt;
     }
   }
 </style>

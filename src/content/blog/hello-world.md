@@ -9,7 +9,7 @@ tags: ["meta", "web-dev"]
 
 If you're reading this, the blog works.
 
-I've been wanting to rebuild my personal site for a while now. The old one was functional but boring - just another generic portfolio template. This time I wanted something that actually reflects my personality.
+I've been wanting to build my online presence for a while now. I wanted something that actually reflects my personality as well as provides a place for those interested in hiring me to see my work.
 
 ## Why the terminal aesthetic?
 

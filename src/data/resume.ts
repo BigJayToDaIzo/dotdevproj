@@ -46,6 +46,7 @@ export const resume: ResumeData = {
     title: "Software Developer",
     email: "webinquiries@josephmyers.dev",
     linkedin: "https://www.linkedin.com/in/josephlmyers",
+    github: "https://github.com/BigJayToDaIzo",
     website: "https://josephmyers.dev",
   },
 
@@ -63,8 +64,10 @@ export const resume: ResumeData = {
       startDate: "Sept 2022",
       endDate: "Mar 2025",
       bullets: [
+        "Wrote small scheduling app as a contractor for Aria using Angular and C#",
         "Wrote automation scripts for businesses to streamline menial tasks",
         "Provided 3D printing design and prototyping services",
+        "Learned Golang, Rust, and Gleam. Various toy projects available on <a href='https://github.com/BigJayToDaIzo' target='_blank'>my GitHub</a>",
       ],
     },
     {
@@ -167,42 +170,36 @@ export const navigation: NavItem[] = [
 
 // ASCII art for different pages
 export const asciiArt = {
-  home: `
-     _                       _
-    (_) ___  ___  ___ _ __ | |__    _ __ ___  _   _  ___ _ __ ___
-    | |/ _ \\/ __|/ _ \\ '_ \\| '_ \\  | '_ \` _ \\| | | |/ _ \\ '__/ __|
-    | | (_) \\__ \\  __/ |_) | | | |_| | | | | | |_| |  __/ |  \\__ \\
-   _/ |\\___/|___/\\___| .__/|_| |_(_)_| |_| |_|\\__, |\\___|_|  |___/
-  |__/               |_|                      |___/
-`.trim(),
+  home: `    _                      _
+   (_) ___  ___  ___ _ __ | |__    _ __ ___  _   _  ___ _ __ ___
+   | |/ _ \\/ __|/ _ \\ '_ \\| '_ \\  | '_ \` _ \\| | | |/ _ \\ '__/ __|
+   | | (_) \\__ \\  __/ |_) | | | |_| | | | | | |_| |  __/ |  \\__ \\
+  _/ |\\___/|___/\\___| .__/|_| |_(_)_| |_| |_|\\__, |\\___|_|  |___/
+ |__/               |_|                      |___/`,
 
-  about: `
+  about: `        _                 _
    __ _| |__   ___  _   _| |_   _ __ ___   ___
   / _\` | '_ \\ / _ \\| | | | __| | '_ \` _ \\ / _ \\
  | (_| | |_) | (_) | |_| | |_  | | | | | |  __/
-  \\__,_|_.__/ \\___/ \\__,_|\\__| |_| |_| |_|\\___|
-`.trim(),
+  \\__,_|_.__/ \\___/ \\__,_|\\__| |_| |_| |_|\\___|`,
 
-  blog: `
-  | |__  | | ___   __ _
-  | '_ \\ | |/ _ \\ / _\` |
-  | |_) || | (_) | (_| |
-  |_.__/ |_|\\___/ \\__, |
-                  |___/
-`.trim(),
+  blog: `  _     _
+ | |__ | | ___   __ _
+ | '_ \\| |/ _ \\ / _\` |
+ | |_) | | (_) | (_| |
+ |_.__/|_|\\___/ \\__, |
+                |___/`,
 
-  projects: `
-  _ __  _ __ ___  (_) ___  ___| |_ ___
- | '_ \\| '__/ _ \\ | |/ _ \\/ __| __/ __|
- | |_) | | | (_) || |  __/ (__| |_\\__ \\
+  projects: `                  _           _
+  _ __  _ __ ___ (_) ___  ___| |_ ___
+ | '_ \\| '__/ _ \\| |/ _ \\/ __| __/ __|
+ | |_) | | | (_) | |  __/ (__| |_\\__ \\
  | .__/|_|  \\___// |\\___|\\___|\\__|___/
- |_|           |__/
-`.trim(),
+ |_|           |__/`,
 
-  hire: `
-  | |__ (_)_ __ ___   _ __ ___   ___
-  | '_ \\| | '__/ _ \\ | '_ \` _ \\ / _ \\
-  | | | | | | |  __/ | | | | | |  __/
-  |_| |_|_|_|  \\___| |_| |_| |_|\\___|
-`.trim(),
+  hire: `  _     _
+ | |__ (_)_ __ ___   _ __ ___   ___
+ | '_ \\| | '__/ _ \\ | '_ \` _ \\ / _ \\
+ | | | | | | |  __/ | | | | | |  __/
+ |_| |_|_|_|  \\___| |_| |_| |_|\\___|`,
 };

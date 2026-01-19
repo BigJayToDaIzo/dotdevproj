@@ -1,80 +1,110 @@
 # Claude Code Project Notes
 
 ## Project Overview
-Building a minimal/clean resume site for josephmyers.dev using Astro static site generation.
+Terminal-themed personal website and resume for josephmyers.dev built with Astro. The site mimics a terminal interface with command-line aesthetics, syntax highlighting colors, and ASCII art.
 
 ## Design Specifications
-- **Style:** Minimal/clean aesthetic with system fonts, neutral grays, single accent color (#3b82f6)
-- **Sections:** Experience, Skills, Education
-- **Performance:** Zero JavaScript, scoped CSS, fully static output
+- **Style:** Terminal/CLI aesthetic with Dracula-inspired dark theme
+- **Font:** JetBrains Mono (monospace)
+- **Theme:** Dark mode default with light mode toggle
+- **Features:** ASCII art headers, command-line styled navigation, PDF export for resume
 - **Deployment:** VPS with Caddy (auto SSL via Let's Encrypt)
 
 ## Current Status
 ✅ GitHub repo created and pushed
 ✅ GitHub Actions workflow configured with Claude Code integration
 ✅ Astro project initialized
-✅ Layout.astro updated with CSS custom properties and typography system
-⏸️ In progress: Creating resume data structure
+✅ Terminal-themed design system implemented
+✅ All core pages built (home, about, blog, projects, hire)
+✅ Resume data populated in src/data/resume.ts
+✅ Dark/light theme toggle working
+✅ Print/PDF export with traditional resume layout (serif font, clean formatting)
+✅ ASCII art alignment fixed (no leading newline in template literals)
+✅ Personal content updated (about page, blog post, projects)
+✅ GitHub link added to contact info (full URLs displayed)
 
-## Implementation Todo List
-
-### Phase 1: Foundation & Data (IN PROGRESS)
-- [x] Update Layout.astro with CSS custom properties and typography
-- [ ] **BLOCKED:** Create resume.ts with actual resume data (need PDF or content from user)
-- [ ] Create Section.astro component with animations
-
-### Phase 2: Core Components (PENDING)
-- [ ] Create Header.astro component
-- [ ] Create ExperienceItem.astro component
-- [ ] Create Experience.astro component
-- [ ] Create Skills.astro component
-- [ ] Create Education.astro component
-- [ ] Create Footer.astro component
-
-### Phase 3: Assembly & Cleanup (PENDING)
-- [ ] Update index.astro to assemble all components
-- [ ] Delete unused Welcome.astro and asset files
-
-### Phase 4: Configuration & Testing (PENDING)
-- [ ] Update astro.config.mjs with site configuration
-- [ ] Test responsive breakpoints (320px, 768px, 1024px+)
-- [ ] Build and preview the site
-- [ ] Deploy to VPS
+## Project Structure
+```
+src/
+├── components/
+│   ├── AsciiArt.astro       # ASCII art display
+│   ├── CommandLine.astro    # Terminal command styling
+│   ├── Cursor.astro         # Blinking cursor
+│   ├── OutputBlock.astro    # Command output container
+│   ├── Prompt.astro         # Terminal prompt (user@host:~$)
+│   ├── TerminalInput.astro  # Fake terminal input field
+│   └── TypeWriter.astro     # Typewriter effect
+├── content/
+│   ├── config.ts            # Content collections config
+│   └── blog/                # Blog posts (markdown)
+├── data/
+│   └── resume.ts            # Resume data + navigation + ASCII art
+├── layouts/
+│   └── Layout.astro         # Main layout with nav, terminal window, footer
+├── pages/
+│   ├── index.astro          # Home page
+│   ├── about.astro          # About me page
+│   ├── blog/                # Blog listing and posts
+│   ├── projects.astro       # Projects page
+│   └── hire.astro           # Resume/contact page with PDF export
+└── styles/
+    └── global.css           # Design system and global styles
+```
 
 ## Design System Reference
 
-### Colors
+### Colors (Dark Theme - Dracula-inspired)
 ```css
---color-text: #1a1a1a;
---color-text-muted: #6b7280;
---color-accent: #3b82f6;
---color-border: #e5e7eb;
---color-hover: #2563eb;
+--bg-primary: #0d1117;
+--bg-secondary: #161b22;
+--bg-tertiary: #21262d;
+--text-primary: #e6edf3;
+--text-secondary: #8b949e;
+--text-muted: #6e7681;
+
+/* Syntax highlighting */
+--syntax-green: #7ee787;
+--syntax-blue: #79c0ff;
+--syntax-purple: #d2a8ff;
+--syntax-orange: #ffa657;
+--syntax-yellow: #ffd866;
+--syntax-cyan: #a5d6ff;
 ```
 
 ### Spacing Scale
 ```css
---spacing-sm: 1rem;
---spacing-md: 2rem;
---spacing-lg: 3rem;
---spacing-xl: 4rem;
+--space-xs: 0.25rem;
+--space-sm: 0.5rem;
+--space-md: 1rem;
+--space-lg: 1.5rem;
+--space-xl: 2rem;
+--space-2xl: 3rem;
 ```
 
 ### Typography
-- h1: 2.5rem (Name in header)
-- h2: 1.875rem (Section titles)
-- h3: 1.5rem (Job titles/company names)
-- body: 1rem
-- System font stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, etc.
+```css
+--font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+--font-size-xs: 0.75rem;
+--font-size-sm: 0.875rem;
+--font-size-base: 1rem;
+--font-size-lg: 1.125rem;
+--font-size-xl: 1.25rem;
+--font-size-2xl: 1.5rem;
+--font-size-3xl: 2rem;
+```
 
-## Next Steps
-1. User to provide resume content (PDF link or raw data)
-2. Populate resume.ts with actual data
-3. Continue with component creation
+## Potential Future Enhancements
+- [ ] Add more blog posts
+- [ ] Add more projects
+- [ ] Interactive terminal commands (Easter eggs?)
+- [ ] Deploy to VPS
+
+## Notes
+- ASCII art strings must NOT start with a newline in template literals (causes leading whitespace to be stripped)
+- Hire page has two versions: terminal-styled (screen) and traditional resume (print/PDF)
+- Resume bullets support HTML via `set:html` directive for links
 
 ## Integration Notes
-- **Astro MCP:** Connected for accessing latest Astro documentation
-- **Caddy MCP:** To be integrated for VPS deployment management
 - **GitHub Actions:** Claude Code action configured with CLAUDE_CODE_OAUTH_TOKEN
 
 ## Repository
