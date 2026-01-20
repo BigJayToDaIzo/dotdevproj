@@ -18,6 +18,7 @@ Terminal-themed personal website and resume for josephmyers.dev built with Astro
 ✅ All core pages built (home, about, blog, projects, hire)
 ✅ Resume data populated in src/data/resume.ts
 ✅ Dark/light theme toggle working
+✅ Aesthetic toggle (terminal/clean modes) with localStorage persistence
 ✅ Print/PDF export with traditional resume layout (serif font, clean formatting)
 ✅ ASCII art alignment fixed (no leading newline in template literals)
 ✅ Personal content updated (about page, blog post, projects)
@@ -97,7 +98,6 @@ src/
 - [ ] Add more blog posts
 - [ ] Add more projects
 - [ ] Interactive terminal commands (Easter eggs?)
-- [ ] Deploy to VPS
 
 ## Notes
 - ASCII art strings must NOT start with a newline in template literals (causes leading whitespace to be stripped)
@@ -110,5 +110,10 @@ src/
 ## Repository
 https://github.com/BigJayToDaIzo/dotdevproj (PUBLIC)
 
-## Deployment Target
-https://josephmyers.dev (VPS with Caddy)
+## Deployment
+- **Target:** https://josephmyers.dev
+- **Server:** VPS with Caddy (auto SSL via Let's Encrypt)
+- **Method:** rsync dist/ folder via SSH
+- **SSH Host:** josephmyers.dev
+- **SSH User:** root
+- **Destination:** /var/www/dotdevresume/

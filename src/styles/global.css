@@ -103,6 +103,97 @@
 }
 
 /* ============================================
+   CLEAN AESTHETIC MODE
+   ============================================ */
+
+/* Clean mode dark theme */
+[data-aesthetic="clean"] {
+  --syntax-green: #6ba3d6;
+  --syntax-purple: #8b9dc3;
+  --syntax-orange: #c4a67a;
+  --syntax-yellow: #b8a07a;
+  --syntax-cyan: #7ab8c4;
+  --syntax-pink: #c494b8;
+  --prompt-user: #6ba3d6;
+  --prompt-host: #8b9dc3;
+  --prompt-at: var(--text-muted);
+  --link: #6ba3d6;
+  --link-hover: #8bbde8;
+  --text-muted: #9ca3af;
+  --text-secondary: #b0b8c4;
+}
+
+/* Clean mode light theme */
+[data-aesthetic="clean"][data-theme="light"] {
+  --syntax-green: #2563eb;
+  --syntax-purple: #4f5d8a;
+  --syntax-orange: #92690e;
+  --syntax-yellow: #7a6420;
+  --syntax-cyan: #0e7490;
+  --syntax-pink: #9d4a7c;
+  --prompt-user: #2563eb;
+  --prompt-host: #4f5d8a;
+  --link: #2563eb;
+  --link-hover: #1d4ed8;
+  --text-muted: #6b7280;
+  --text-secondary: #4b5563;
+}
+
+[data-aesthetic="clean"] .ascii-art {
+  display: none;
+}
+
+[data-aesthetic="clean"] .terminal-header {
+  display: none;
+}
+
+[data-aesthetic="clean"] .terminal-window {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+[data-aesthetic="clean"] .terminal-body {
+  padding: var(--space-lg);
+}
+
+[data-aesthetic="clean"] .command-line {
+  display: none;
+}
+
+[data-aesthetic="clean"] .terminal-input-wrapper {
+  display: none;
+}
+
+[data-aesthetic="clean"] .cursor {
+  display: none;
+}
+
+/* Nav links in clean mode - hide terminal syntax, show clean text */
+[data-aesthetic="clean"] .nav-link .text-muted,
+[data-aesthetic="clean"] .nav-link .command {
+  display: none;
+}
+
+[data-aesthetic="clean"] .nav-link .argument {
+  color: var(--text-secondary);
+}
+
+[data-aesthetic="clean"] .nav-link:hover .argument {
+  color: var(--text-primary);
+}
+
+/* Footer in clean mode - simplify */
+[data-aesthetic="clean"] .footer-content .text-muted::before {
+  content: none;
+}
+
+[data-aesthetic="clean"] .footer-content > span:first-child {
+  display: none;
+}
+
+/* ============================================
    RESET & BASE
    ============================================ */
 

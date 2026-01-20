@@ -59,7 +59,7 @@ export const resume: ResumeData = {
       bullets: [
         "Manage small team of technology professionals including a web developer and a network administrator",
         "Deployed a 30 user Windows Server with Active Directory",
-        "Self hosting web server to migrate web presence away from wordpress and godaddy to on site hosting and built with modern technologies",
+        "Self hosting web server to migrate web presence away from wordpress and godaddy to on site hosting built with modern technologies",
         "Deployed Vaultwarden password manager for secure credential management",
         "Configured and maintain 80TB NAS for data storage",
         "Oversee all infrastructure - if it is plugged into the wall or wifi, it is under my watchful care",
@@ -85,7 +85,7 @@ export const resume: ResumeData = {
       bullets: [
         "Wrote Blue/Green Deploy CI/CD Pipeline for Pivotal Cloud Foundry in Python",
         "Built SPAs with .NET, ASP, Java, Angular and React",
-        "Parsed Historical User Data from Various API Endpoints Using Python",
+        "Parsed Historical User Data from Various Data Warehouses Using Python",
         "Modernized Flash/ColdFusion apps by migrating them into Pivotal Cloud Foundry using .NET/Entity Framework/Angular 11",
         "Collaborated with teams on automation of low level tasks",
         "Built HR Collective Bargaining and Discipline tracking application in .NET/Angular and deployed in a CI/CD pipeline in ADO",

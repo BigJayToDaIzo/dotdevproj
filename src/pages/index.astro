@@ -9,6 +9,8 @@ import { asciiArt, resume } from '../data/resume';
 <Layout title="Home" prompt="home">
   <AsciiArt art={asciiArt.home} color="green" />
 
+  <p class="aesthetic-hint text-muted"># Prefer a cleaner look? Try the [ clean ] button above.</p>
+
   <CommandLine command="whoami" section="home" />
 
   <div class="output">
@@ -91,5 +93,15 @@ import { asciiArt, resume } from '../data/resume';
 
   .dir-entry a:hover {
     text-decoration: underline;
+  }
+
+  .aesthetic-hint {
+    margin-bottom: var(--space-lg);
+    font-size: var(--font-size-sm);
+    font-style: italic;
+  }
+
+  :global([data-aesthetic="clean"]) .aesthetic-hint {
+    display: none;
   }
 </style>

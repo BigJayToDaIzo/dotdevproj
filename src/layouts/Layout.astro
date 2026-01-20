@@ -17,7 +17,7 @@ const terminalTitle = `joseph@${prompt}:~`;
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" data-aesthetic="terminal">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -27,6 +27,13 @@ const terminalTitle = `joseph@${prompt}:~`;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <title>{title} | josephmyers.dev</title>
+    <script is:inline>
+      // Set aesthetic before render to prevent flash
+      (function() {
+        const saved = localStorage.getItem('aesthetic') || 'terminal';
+        document.documentElement.setAttribute('data-aesthetic', saved);
+      })();
+    </script>
   </head>
   <body>
     <div class="site-wrapper">
@@ -54,10 +61,16 @@ const terminalTitle = `joseph@${prompt}:~`;
             </a>
           </div>
 
-          <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-            <span class="theme-icon dark-icon">[ dark ]</span>
-            <span class="theme-icon light-icon">[ light ]</span>
-          </button>
+          <div class="toggle-buttons">
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+              <span class="theme-icon dark-icon">[ dark ]</span>
+              <span class="theme-icon light-icon">[ light ]</span>
+            </button>
+            <button class="aesthetic-toggle" id="aesthetic-toggle" aria-label="Toggle aesthetic">
+              <span class="aesthetic-icon terminal-icon">[ term ]</span>
+              <span class="aesthetic-icon clean-icon">[ clean ]</span>
+            </button>
+          </div>
         </nav>
       </header>
 
@@ -111,6 +124,18 @@ const terminalTitle = `joseph@${prompt}:~`;
         if (!localStorage.getItem('theme')) {
           html.setAttribute('data-theme', e.matches ? 'dark' : 'light');
         }
+      });
+
+      // Aesthetic toggle functionality
+      const aestheticToggle = document.getElementById('aesthetic-toggle');
+      const savedAesthetic = localStorage.getItem('aesthetic') || 'terminal';
+      html.setAttribute('data-aesthetic', savedAesthetic);
+
+      aestheticToggle?.addEventListener('click', () => {
+        const current = html.getAttribute('data-aesthetic');
+        const next = current === 'terminal' ? 'clean' : 'terminal';
+        html.setAttribute('data-aesthetic', next);
+        localStorage.setItem('aesthetic', next);
       });
     </script>
 
@@ -176,7 +201,13 @@ const terminalTitle = `joseph@${prompt}:~`;
         color: var(--syntax-green);
       }
 
-      .theme-toggle {
+      .toggle-buttons {
+        display: flex;
+        gap: var(--space-xs);
+      }
+
+      .theme-toggle,
+      .aesthetic-toggle {
         background: transparent;
         border: 1px solid var(--border-color);
         color: var(--text-secondary);
@@ -188,16 +219,33 @@ const terminalTitle = `joseph@${prompt}:~`;
         transition: all var(--transition-fast);
       }
 
-      .theme-toggle:hover {
+      .theme-toggle:hover,
+      .aesthetic-toggle:hover {
         border-color: var(--text-secondary);
         color: var(--text-primary);
       }
 
-      .light-icon { display: none; }
-      .dark-icon { display: inline; }
+      .light-icon { display: inline; }
+      .dark-icon { display: none; }
 
-      [data-theme="light"] .light-icon { display: inline; }
-      [data-theme="light"] .dark-icon { display: none; }
+      [data-theme="light"] .light-icon { display: none; }
+      [data-theme="light"] .dark-icon { display: inline; }
+
+      .clean-icon { display: inline; }
+      .terminal-icon { display: none; }
+
+      [data-aesthetic="clean"] .clean-icon { display: none; }
+      [data-aesthetic="clean"] .terminal-icon { display: inline; }
+
+      [data-aesthetic="clean"] .aesthetic-toggle {
+        border-color: #7ee787;
+        color: #7ee787;
+        box-shadow: 0 0 8px rgba(126, 231, 135, 0.4), inset 0 0 4px rgba(126, 231, 135, 0.1);
+      }
+
+      [data-aesthetic="clean"] .aesthetic-toggle:hover {
+        box-shadow: 0 0 12px rgba(126, 231, 135, 0.6), inset 0 0 6px rgba(126, 231, 135, 0.2);
+      }
 
       /* Main Content */
       .site-main {
@@ -237,7 +285,7 @@ const terminalTitle = `joseph@${prompt}:~`;
           gap: var(--space-md);
         }
 
-        .theme-toggle {
+        .toggle-buttons {
           position: absolute;
           top: var(--space-md);
           right: var(--space-md);
