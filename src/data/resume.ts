@@ -56,7 +56,14 @@ export const resume: ResumeData = {
       role: "CTO",
       startDate: "Mar 2025",
       endDate: "Present",
-      bullets: [],
+      bullets: [
+        "Manage small team of technology professionals including a web developer and a network administrator",
+        "Deployed a 30 user Windows Server with Active Directory",
+        "Self hosting web server to migrate web presence away from wordpress and godaddy to on site hosting and built with modern technologies",
+        "Deployed Vaultwarden password manager for secure credential management",
+        "Configured and maintain 80TB NAS for data storage",
+        "Oversee all infrastructure - if it is plugged into the wall or wifi, it is under my watchful care",
+      ],
     },
     {
       company: "Independent Consultant",
@@ -128,11 +135,11 @@ export const resume: ResumeData = {
     },
     {
       level: "200 Hours",
-      skills: ["MVC", "SQL", "PHP", "JavaScript", "TypeScript"],
+      skills: ["Gleam", "Lustre", "MVC", "PHP", "JavaScript", "TypeScript"],
     },
     {
       level: "100 Hours",
-      skills: ["SQL Server", "MySQL", "HTML5", "CSS/SASS"],
+      skills: ["Rust", "Go", "SQL Server", "MySQL", "HTML5", "CSS/SASS"],
     },
   ],
 
