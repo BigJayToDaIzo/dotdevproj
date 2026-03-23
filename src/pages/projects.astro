@@ -54,7 +54,7 @@ const otherProjects = [
   <AsciiArt art={asciiArt.projects} color="orange" />
 
   <div class="tab-bar">
-    <button class="tab active" data-tab="adad8">adad8</button>
+    <button class="tab active" data-tab="adad8">adad8 <span class="tab-lang">[C#]</span></button>
     <button class="tab" data-tab="others">Others</button>
   </div>
 
@@ -189,6 +189,11 @@ const otherProjects = [
     border-color: var(--border-color);
     border-bottom: 1px solid var(--bg-primary);
     margin-bottom: -1px;
+  }
+
+  .tab-lang {
+    color: var(--syntax-purple);
+    font-size: var(--font-size-xs);
   }
 
   .tab-content {
