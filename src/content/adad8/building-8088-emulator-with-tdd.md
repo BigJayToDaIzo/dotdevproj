@@ -35,7 +35,7 @@ Every one of these was a real bug caught by the test suite, not by inspection.
 
 ## Signing Off
 
-My favorite learning from this particular session is how easy it is to mask 6 bytes when you only mean to mask 5. I could not for the life of me figure out why the memory wasn't properly overflowing back to the 0 index. Turns out I had given it an extra order of magnitude and essentially configured a 16MB memory space, not seen till the 80286 according to legend. When the overflow mask didn't set as the integration tests expected, we found a missed edge case for the unit tests that should have ensured the flag was setting properly.
+My favorite learning from this particular session is how easy it is to mask 6 bytes when you only mean to mask 5. I could not for the life of me figure out why the memory wasn't properly wrapping the instant the carry bit crossed the 20-bit line. Turns out I had masked an extra order of magnitude, making overflow impossible until the 16MB mark, a memory space the world wouldn't see until the 80286. When the overflow mask didn't set as the integration tests expected, we found a missed edge case for the unit tests that should have ensured the flag was setting properly when that 21st bit caught a carry.
 
 *TDD mf'n rules!*
 *- jm*
