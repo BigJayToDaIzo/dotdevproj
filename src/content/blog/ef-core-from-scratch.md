@@ -3,7 +3,6 @@ title: "Learning EF Core in 2026 (And Fighting Microsoft Every Step)"
 description: "Attempting to learn Entity Framework Core from the official tutorial. The tooling fought back harder than the ORM."
 pubDate: 2026-02-27
 tags: ["csharp", "dotnet", "ef-core", "learning", "developer-experience"]
-draft: true
 ---
 
 I set out to learn EF Core. I spent most of my time fighting the toolchain instead of learning the ORM.

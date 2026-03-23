@@ -98,6 +98,15 @@ src/
 - [ ] Add more blog posts
 - [ ] Add more projects
 - [ ] Interactive terminal commands (Easter eggs?)
+- [ ] GitHub Actions deploy pipeline: auto build + rsync to VPS on push to main (needs SSH key pair setup between GitHub Actions and VPS)
+
+## Tooling
+- **Package Manager:** bun
+- **Version Manager:** asdf-vm
+- **Runtime:** bun (not Node)
+- **Framework:** Astro 5 with Svelte
+- **Build:** `bun run build`
+- **Dev:** `bun run dev`
 
 ## Notes
 - ASCII art strings must NOT start with a newline in template literals (causes leading whitespace to be stripped)
