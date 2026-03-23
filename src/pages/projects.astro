@@ -4,16 +4,21 @@ import AsciiArt from '../components/AsciiArt.astro';
 import CommandLine from '../components/CommandLine.astro';
 import TerminalInput from '../components/TerminalInput.astro';
 import { asciiArt } from '../data/resume';
+import { getCollection, render } from 'astro:content';
 
-// Projects data - can be moved to a separate file or content collection later
-const projects = [
-  {
-    name: "adad8",
-    description: "My very first computer's processor (8088) emulator.",
-    tech: ["C#"],
-    status: "active",
-    url: "https://github.com/BigJayToDaIzo/adad8",
-  },
+const adad8Posts = await getCollection('adad8', ({ data }) =>
+  import.meta.env.DEV || !data.draft
+);
+adad8Posts.sort((a, b) => a.data.order - b.data.order);
+
+const renderedPosts = await Promise.all(
+  adad8Posts.map(async (post) => {
+    const { Content } = await render(post);
+    return { post, Content };
+  })
+);
+
+const otherProjects = [
   {
     name: "dice_trio",
     description: "A minimal dice rolling library that parses and rolls standard dice expressions (d6, 2d6+3, d20-1). Zero dependencies, 60 tests, built for game development.",
@@ -48,55 +53,152 @@ const projects = [
 <Layout title="Projects" prompt="projects" description="Projects by Joseph Myers">
   <AsciiArt art={asciiArt.projects} color="orange" />
 
-  <CommandLine command="tree" args="projects/ -L 1" section="projects" />
+  <div class="tab-bar">
+    <button class="tab active" data-tab="adad8">adad8</button>
+    <button class="tab" data-tab="others">Others</button>
+  </div>
 
-  <div class="output tree-view">
-    <p class="text-cyan">projects/</p>
-    {projects.map((project, index) => (
-      <div class="tree-item">
-        <span class="tree-branch text-muted">{index === projects.length - 1 ? '└──' : '├──'}</span>
-        <span class={`tree-name ${project.status === 'active' ? 'text-green' : 'text-secondary'}`}>
-          {project.name}/
-        </span>
-        <span class="tree-status text-muted">
-          [{project.status}]
-        </span>
-      </div>
+  <div class="tab-content active" id="tab-adad8">
+    <CommandLine command="cat" args="adad8/README.md" section="projects" />
+    <div class="output project-detail">
+      <h3 class="project-name">
+        <span class="text-yellow"># adad8</span>
+        <a href="https://github.com/BigJayToDaIzo/adad8" target="_blank" rel="noopener" class="project-link text-blue">
+          [github.com/BigJayToDaIzo/adad8]
+        </a>
+      </h3>
+      <p class="project-desc">My very first computer's processor (8088) emulator.</p>
+      <p class="project-tech">
+        <span class="text-muted">Tech:</span>
+        <span class="tech-tag text-purple">[C#]</span>
+        <span class="tech-tag text-purple">[.NET 10]</span>
+        <span class="tech-tag text-purple">[TDD]</span>
+      </p>
+      <p class="project-tech">
+        <span class="text-muted">Status:</span>
+        <span class="text-green">active</span>
+      </p>
+    </div>
+
+    <CommandLine command="ls" args="adad8/docs/" section="projects" />
+    <p class="output text-muted">
+      These are just a <strong class="text-primary">few</strong> highlights from the project documentation.
+      The full notes live in the
+      <a href="https://github.com/BigJayToDaIzo/adad8" target="_blank" rel="noopener" class="text-blue">repo</a>
+      where CLAUDE.md, .plan, and inline comments have loads more detail.
+    </p>
+
+    {renderedPosts.map(({ post, Content }) => (
+      <details class={`doc-panel ${post.data.draft ? 'is-draft' : ''}`}>
+        <summary>
+          {post.data.draft && <span class="draft-badge">[DRAFT]</span>}
+          <span class="text-yellow">{post.data.title}</span>
+          <span class="teaser text-muted"> — {post.data.teaser}</span>
+        </summary>
+        <div class="doc-content">
+          <Content />
+        </div>
+      </details>
     ))}
   </div>
 
-  {projects.map((project) => (
-    <>
-      <CommandLine command="cat" args={`${project.name}/README.md`} section="projects" />
-      <div class="output project-detail">
-        <h3 class="project-name">
-          <span class="text-yellow"># {project.name}</span>
-          {project.url && (
-            <a href={project.url} target="_blank" rel="noopener" class="project-link text-blue">
-              [{project.url.replace('https://', '')}]
-            </a>
-          )}
-        </h3>
-        <p class="project-desc">{project.description}</p>
-        <p class="project-tech">
-          <span class="text-muted">Tech:</span>
-          {project.tech.map((t) => (
-            <span class="tech-tag text-purple">[{t}]</span>
-          ))}
-        </p>
-      </div>
-    </>
-  ))}
+  <div class="tab-content" id="tab-others">
+    <CommandLine command="tree" args="projects/ -L 1" section="projects" />
 
-  <div class="coming-soon">
-    <CommandLine command="echo" args='"More projects coming soon..."' section="projects" />
-    <p class="output text-muted">"More projects coming soon..."</p>
+    <div class="output tree-view">
+      <p class="text-cyan">projects/</p>
+      {otherProjects.map((project, index) => (
+        <div class="tree-item">
+          <span class="tree-branch text-muted">{index === otherProjects.length - 1 ? '└──' : '├──'}</span>
+          <span class={`tree-name ${project.status === 'active' ? 'text-green' : 'text-secondary'}`}>
+            {project.name}/
+          </span>
+          <span class="tree-status text-muted">
+            [{project.status}]
+          </span>
+        </div>
+      ))}
+    </div>
+
+    {otherProjects.map((project) => (
+      <>
+        <CommandLine command="cat" args={`${project.name}/README.md`} section="projects" />
+        <div class="output project-detail">
+          <h3 class="project-name">
+            <span class="text-yellow"># {project.name}</span>
+            {project.url && (
+              <a href={project.url} target="_blank" rel="noopener" class="project-link text-blue">
+                [{project.url.replace('https://', '')}]
+              </a>
+            )}
+          </h3>
+          <p class="project-desc">{project.description}</p>
+          <p class="project-tech">
+            <span class="text-muted">Tech:</span>
+            {project.tech.map((t) => (
+              <span class="tech-tag text-purple">[{t}]</span>
+            ))}
+          </p>
+        </div>
+      </>
+    ))}
   </div>
 
   <TerminalInput section="projects" />
 </Layout>
 
+<script>
+  document.querySelectorAll('.tab').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach((c) => c.classList.remove('active'));
+      tab.classList.add('active');
+      const target = tab.getAttribute('data-tab');
+      document.getElementById(`tab-${target}`)?.classList.add('active');
+    });
+  });
+</script>
+
 <style>
+  .tab-bar {
+    display: flex;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--space-xs);
+  }
+
+  .tab {
+    background: none;
+    border: 1px solid transparent;
+    border-bottom: none;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    padding: var(--space-xs) var(--space-md);
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .tab:hover {
+    color: var(--text-primary);
+  }
+
+  .tab.active {
+    color: var(--syntax-green);
+    border-color: var(--border-color);
+    border-bottom: 1px solid var(--bg-primary);
+    margin-bottom: -1px;
+  }
+
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
   .output {
     padding-left: var(--space-md);
     margin-bottom: var(--space-lg);
@@ -156,8 +258,109 @@ const projects = [
     margin-left: var(--space-xs);
   }
 
-  .coming-soon {
-    margin-top: var(--space-xl);
-    opacity: 0.7;
+  .doc-panel {
+    margin-bottom: var(--space-sm);
+    border-left: 2px solid var(--border-color);
+    padding-left: var(--space-md);
+    max-width: 80ch;
+  }
+
+  .doc-panel summary {
+    cursor: pointer;
+    padding: var(--space-sm) 0;
+    font-size: var(--font-size-sm);
+    list-style: none;
+  }
+
+  .doc-panel summary::before {
+    content: '▸ ';
+    color: var(--text-muted);
+  }
+
+  .doc-panel[open] summary::before {
+    content: '▾ ';
+  }
+
+  .doc-panel summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .draft-badge {
+    color: var(--syntax-orange);
+    font-size: var(--font-size-xs);
+    margin-right: var(--space-xs);
+  }
+
+  .is-draft {
+    opacity: 0.5;
+    border-left-style: dashed;
+  }
+
+  .teaser {
+    font-size: var(--font-size-xs);
+  }
+
+  .doc-content {
+    padding: var(--space-md) 0;
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+  }
+
+  .doc-content :global(h2) {
+    color: var(--syntax-cyan);
+    font-size: var(--font-size-base);
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+  }
+
+  .doc-content :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .doc-content :global(p) {
+    margin-bottom: var(--space-sm);
+  }
+
+  .doc-content :global(code) {
+    background: var(--bg-tertiary);
+    padding: 0.1em 0.3em;
+    border-radius: 3px;
+    font-size: var(--font-size-xs);
+  }
+
+  .doc-content :global(pre) {
+    background: var(--bg-secondary);
+    padding: var(--space-md);
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-bottom: var(--space-sm);
+  }
+
+  .doc-content :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+
+  .doc-content :global(strong) {
+    color: var(--syntax-orange);
+  }
+
+  .doc-content :global(a) {
+    color: var(--syntax-blue);
+    text-decoration: none;
+  }
+
+  .doc-content :global(a:hover) {
+    text-decoration: underline;
+  }
+
+  .doc-content :global(ul),
+  .doc-content :global(ol) {
+    padding-left: var(--space-lg);
+    margin-bottom: var(--space-sm);
+  }
+
+  .doc-content :global(li) {
+    margin-bottom: var(--space-xs);
   }
 </style>
